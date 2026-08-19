@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import keystatic from '@keystatic/astro';
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel'; // <-- تغییر مهم اینجاست
 
 export default defineConfig({
   output: 'server',
