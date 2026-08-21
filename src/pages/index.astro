@@ -1,31 +1,248 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
 export const prerender = true;
 
-const posts = await getCollection('posts');
+// داده‌های نمونه برای تست طراحی (بعداً از Keystone گرفته می‌شود)
+const featuredCities = [
+  { name: 'اصفهان', slug: 'اصفهان', image: 'https://picsum.photos/seed/isfahan/400/300', count: 120 },
+  { name: 'تهران', slug: 'تهران', image: 'https://picsum.photos/seed/tehran/400/300', count: 250 },
+  { name: 'شیراز', slug: 'شیراز', image: 'https://picsum.photos/seed/shiraz/400/300', count: 95 },
+  { name: 'مشهد', slug: 'مشهد', image: 'https://picsum.photos/seed/mashhad/400/300', count: 180 },
+];
+
+const categories = [
+  { name: 'کافی‌شاپ', slug: 'کافی-شاپ', icon: '☕' },
+  { name: 'رستوران', slug: 'رستوران', icon: '🍽️' },
+  { name: 'کارواش', slug: 'کارواش', icon: '🚗' },
+  { name: 'آرایشگاه', slug: 'آرایشگاه', icon: '💇' },
+  { name: 'باشگاه', slug: 'باشگاه', icon: '🏋️' },
+  { name: 'هتل', slug: 'هتل', icon: '🏨' },
+];
+
+const recentArticles = [
+  { 
+    title: 'بهترین کارواش‌های اصفهان - راهنمای کامل ۱۴۰۳', 
+    slug: 'بهترین-کارواش-اصفهان',
+    excerpt: 'لیست کاملی از بهترین و ارزان‌ترین کارواش‌های اصفهان با آدرس و شماره تماس...',
+    city: 'اصفهان',
+    category: 'کارواش'
+  },
+  { 
+    title: 'ارزان‌ترین رستوران‌های تهران با کیفیت عالی', 
+    slug: 'ارزان-رستوران-تهران',
+    excerpt: 'معرفی رستوران‌های اقتصادی تهران که کیفیت غذای فوق‌العاده‌ای دارند...',
+    city: 'تهران',
+    category: 'رستوران'
+  },
+  { 
+    title: 'لوکس‌ترین کافی‌شاپ‌های شیراز کجاست؟', 
+    slug: 'لوکس-کافی-شاپ-شیراز',
+    excerpt: 'اگر به دنبال تجربه‌ای خاص در شیراز هستید، این کافی‌شاپ‌ها را از دست ندهید...',
+    city: 'شیراز',
+    category: 'کافی‌شاپ'
+  },
+];
 ---
 
-<Layout title="Keystatic & Astro's Content Collections">
-  <div>
-    <h1>Keystatic ⚡️ + Astro 🚀</h1>
-    <p>
-      This homepage shows how to load data from Astro's content collections.
-    </p>
-    <p>
-      <a href="/keystatic">Click here to visit the Admin UI</a>, or the link
-      below to view a post in the collection.
-    </p>
-    <h2>Posts</h2>
-    <ul>
-      {
-        posts.map(post => (
-          <li>
-            <a href={`/posts/${post.id}`}>{post.data.title}</a>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+<Layout 
+  title="بهترین‌ها | معرفی بهترین کسب‌وکارهای شهر شما"
+  description="سایت بهترین‌ها - مرجع کامل معرفی بهترین کسب‌وکارهای ایران. بهترین رستوران‌ها، کافی‌شاپ‌ها، کارواش‌ها و خدمات هر شهر را اینجا پیدا کنید."
+>
+  <!-- Header / Hero Section -->
+  <header class="bg-gradient-to-l from-blue-600 to-blue-800 text-white py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          بهترین‌های شهرت رو پیدا کن! 🌟
+        </h1>
+        <p class="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
+          مرجع کامل معرفی بهترین کسب‌وکارهای ایران. از بهترین رستوران‌ها تا ارزان‌ترین کارواش‌ها، همه رو اینجا پیدا کن.
+        </p>
+        
+        <!-- Search Box -->
+        <div class="bg-white rounded-2xl p-2 shadow-2xl max-w-2xl mx-auto">
+          <form class="flex flex-col md:flex-row gap-2">
+            <input 
+              type="text" 
+              placeholder="چه چیزی جستجو می‌کنید؟ (مثلاً: کارواش، رستوران...)"
+              class="flex-1 px-6 py-4 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button 
+              type="submit"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 transform hover:scale-105"
+            >
+              جستجو 🔍
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Categories Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">دسته‌بندی‌های محبوب</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {categories.map(category => (
+          <a 
+            href={`/category/${category.slug}`}
+            class="card p-6 text-center hover:shadow-lg transition-all duration-200 group"
+          >
+            <div class="text-5xl mb-3 transform group-hover:scale-110 transition-transform duration-200">
+              {category.icon}
+            </div>
+            <h3 class="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+              {category.name}
+            </h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Cities Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">شهرهای پرطرفدار</h2>
+      <p class="text-center text-gray-600 mb-12 text-lg">بهترین کسب‌وکارهای شهرهای بزرگ ایران</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {featuredCities.map(city => (
+          <a 
+            href={`/city/${city.slug}`}
+            class="card group overflow-hidden block"
+          >
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src={city.image} 
+                alt={city.name}
+                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              <div class="absolute bottom-4 right-4 text-white">
+                <h3 class="text-xl font-bold">{city.name}</h3>
+                <p class="text-sm text-gray-200">{city.count} کسب‌وکار</p>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Articles Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800">آخرین مقالات</h2>
+        <a href="/articles" class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2">
+          مشاهده همه
+          <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {recentArticles.map(article => (
+          <article class="card overflow-hidden hover:shadow-xl transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
+                  {article.city}
+                </span>
+                <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">
+                  {article.category}
+                </span>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-blue-600 transition-colors">
+                <a href={`/article/${article.slug}`}>{article.title}</a>
+              </h3>
+              <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">
+                {article.excerpt}
+              </p>
+              <a 
+                href={`/article/${article.slug}`}
+                class="btn btn-primary w-full justify-center"
+              >
+                مطالعه مقاله
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gradient-to-l from-blue-600 to-blue-800 text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">کسب‌وکار خود را معرفی کنید</h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        اگر صاحب کسب‌وکاری هستید، همین حالا به جمع بهترین‌ها بپیوندید و مشتریان بیشتری جذب کنید.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold transition-all duration-200 transform hover:scale-105">
+          ثبت رایگان کسب‌وکار
+        </button>
+        <button class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-bold transition-all duration-200">
+          اطلاعات بیشتر
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="text-white text-xl font-bold mb-4">بهترین‌ها</h3>
+          <p class="text-gray-400 leading-relaxed">
+            مرجع کامل معرفی بهترین کسب‌وکارهای ایران. ما به شما کمک می‌کنیم بهترین خدمات را در شهر خود پیدا کنید.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">دسترسی سریع</h4>
+          <ul class="space-y-2">
+            <li><a href="/" class="hover:text-white transition-colors">صفحه اصلی</a></li>
+            <li><a href="/cities" class="hover:text-white transition-colors">شهرها</a></li>
+            <li><a href="/categories" class="hover:text-white transition-colors">دسته‌بندی‌ها</a></li>
+            <li><a href="/articles" class="hover:text-white transition-colors">مقالات</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">دسته‌بندی‌ها</h4>
+          <ul class="space-y-2">
+            {categories.slice(0, 4).map(cat => (
+              <li><a href={`/category/${cat.slug}`} class="hover:text-white transition-colors">{cat.name}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">تماس با ما</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li>📧 info@behtarinha.ir</li>
+            <li>📞 ۰۲۱-۱۲۳۴۵۶۷۸</li>
+            <li>📍 تهران، ایران</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
+        <p>© ۱۴۰۳ سایت بهترین‌ها. تمامی حقوق محفوظ است.</p>
+      </div>
+    </div>
+  </footer>
 </Layout>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
