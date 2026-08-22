@@ -3,45 +3,77 @@ import Layout from '../layouts/Layout.astro';
 
 export const prerender = true;
 
-// داده‌های نمونه برای تست طراحی (بعداً از Keystone گرفته می‌شود)
-const featuredCities = [
-  { name: 'اصفهان', slug: 'اصفهان', image: 'https://picsum.photos/seed/isfahan/400/300', count: 120 },
-  { name: 'تهران', slug: 'تهران', image: 'https://picsum.photos/seed/tehran/400/300', count: 250 },
-  { name: 'شیراز', slug: 'شیراز', image: 'https://picsum.photos/seed/shiraz/400/300', count: 95 },
-  { name: 'مشهد', slug: 'مشهد', image: 'https://picsum.photos/seed/mashhad/400/300', count: 180 },
-];
-
-const categories = [
-  { name: 'کافی‌شاپ', slug: 'کافی-شاپ', icon: '☕' },
-  { name: 'رستوران', slug: 'رستوران', icon: '🍽️' },
-  { name: 'کارواش', slug: 'کارواش', icon: '🚗' },
-  { name: 'آرایشگاه', slug: 'آرایشگاه', icon: '💇' },
-  { name: 'باشگاه', slug: 'باشگاه', icon: '🏋️' },
-  { name: 'هتل', slug: 'هتل', icon: '🏨' },
-];
-
+// داده‌های نمونه برای مقالات (بعداً از Keystatic گرفته می‌شود)
 const recentArticles = [
   { 
-    title: 'بهترین کارواش‌های اصفهان - راهنمای کامل ۱۴۰۳', 
-    slug: 'بهترین-کارواش-اصفهان',
-    excerpt: 'لیست کاملی از بهترین و ارزان‌ترین کارواش‌های اصفهان با آدرس و شماره تماس...',
-    city: 'اصفهان',
-    category: 'کارواش'
-  },
-  { 
-    title: 'ارزان‌ترین رستوران‌های تهران با کیفیت عالی', 
-    slug: 'ارزان-رستوران-تهران',
-    excerpt: 'معرفی رستوران‌های اقتصادی تهران که کیفیت غذای فوق‌العاده‌ای دارند...',
+    title: 'بهترین رستوران‌های تهران - راهنمای کامل ۱۴۰۳', 
+    slug: 'بهترین-رستوران-تهران',
+    excerpt: 'لیست کاملی از بهترین رستوران‌های تهران با آدرس، شماره تماس و نظرات کاربران...',
     city: 'تهران',
-    category: 'رستوران'
+    category: 'رستوران',
+    image: 'https://picsum.photos/seed/restaurant/800/600',
+    date: '۱۵ آبان ۱۴۰۳',
+    readTime: '۵ دقیقه'
   },
   { 
-    title: 'لوکس‌ترین کافی‌شاپ‌های شیراز کجاست؟', 
+    title: 'ارزان‌ترین کارواش‌های اصفهان کجاست؟', 
+    slug: 'ارزان-کارواش-اصفهان',
+    excerpt: 'معرفی کارواش‌های اقتصادی اصفهان که کیفیت شستشوی فوق‌العاده‌ای دارند...',
+    city: 'اصفهان',
+    category: 'کارواش',
+    image: 'https://picsum.photos/seed/carwash/800/600',
+    date: '۱۲ آبان ۱۴۰۳',
+    readTime: '۴ دقیقه'
+  },
+  { 
+    title: 'لوکس‌ترین کافی‌شاپ‌های شیراز', 
     slug: 'لوکس-کافی-شاپ-شیراز',
     excerpt: 'اگر به دنبال تجربه‌ای خاص در شیراز هستید، این کافی‌شاپ‌ها را از دست ندهید...',
     city: 'شیراز',
-    category: 'کافی‌شاپ'
+    category: 'کافی‌شاپ',
+    image: 'https://picsum.photos/seed/coffee/800/600',
+    date: '۱۰ آبان ۱۴۰۳',
+    readTime: '۶ دقیقه'
   },
+  { 
+    title: 'بهترین هتل‌های مشهد برای اقامت نوروز', 
+    slug: 'بهترین-هتل-مشهد',
+    excerpt: 'راهنمای کامل رزرو هتل در مشهد با قیمت‌های مناسب و امکانات عالی...',
+    city: 'مشهد',
+    category: 'هتل',
+    image: 'https://picsum.photos/seed/hotel/800/600',
+    date: '۸ آبان ۱۴۰۳',
+    readTime: '۷ دقیقه'
+  },
+  { 
+    title: 'محبوب‌ترین باشگاه‌های ورزشی تبریز', 
+    slug: 'باشگاه-تبریز',
+    excerpt: 'لیستی از بهترین باشگاه‌های بدنسازی و تناسب اندام در تبریز...',
+    city: 'تبریز',
+    category: 'باشگاه',
+    image: 'https://picsum.photos/seed/gym/800/600',
+    date: '۵ آبان ۱۴۰۳',
+    readTime: '۵ دقیقه'
+  },
+  { 
+    title: 'آرایشگاه‌های مردانه برتر کرج', 
+    slug: 'آرایشگاه-کرج',
+    excerpt: 'معرفی بهترین آرایشگاه‌های مردانه کرج با خدمات حرفه‌ای...',
+    city: 'کرج',
+    category: 'آرایشگاه',
+    image: 'https://picsum.photos/seed/barber/800/600',
+    date: '۳ آبان ۱۴۰۳',
+    readTime: '۴ دقیقه'
+  },
+];
+
+const categories = [
+  { name: 'کافی‌شاپ', slug: 'کافی-شاپ', icon: '☕', count: 120 },
+  { name: 'رستوران', slug: 'رستوران', icon: '🍽️', count: 250 },
+  { name: 'کارواش', slug: 'کارواش', icon: '🚗', count: 95 },
+  { name: 'آرایشگاه', slug: 'آرایشگاه', icon: '💇', count: 180 },
+  { name: 'باشگاه', slug: 'باشگاه', icon: '🏋️', count: 140 },
+  { name: 'هتل', slug: 'هتل', icon: '🏨', count: 85 },
 ];
 ---
 
@@ -49,196 +81,364 @@ const recentArticles = [
   title="بهترین‌ها | معرفی بهترین کسب‌وکارهای شهر شما"
   description="سایت بهترین‌ها - مرجع کامل معرفی بهترین کسب‌وکارهای ایران. بهترین رستوران‌ها، کافی‌شاپ‌ها، کارواش‌ها و خدمات هر شهر را اینجا پیدا کنید."
 >
-  <!-- Header / Hero Section -->
-  <header class="bg-gradient-to-l from-blue-600 to-blue-800 text-white py-16 md:py-24">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          بهترین‌های شهرت رو پیدا کن! 🌟
-        </h1>
-        <p class="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed">
-          مرجع کامل معرفی بهترین کسب‌وکارهای ایران. از بهترین رستوران‌ها تا ارزان‌ترین کارواش‌ها، همه رو اینجا پیدا کن.
-        </p>
-        
-        <!-- Search Box -->
-        <div class="bg-white rounded-2xl p-2 shadow-2xl max-w-2xl mx-auto">
-          <form class="flex flex-col md:flex-row gap-2">
-            <input 
-              type="text" 
-              placeholder="چه چیزی جستجو می‌کنید؟ (مثلاً: کارواش، رستوران...)"
-              class="flex-1 px-6 py-4 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button 
-              type="submit"
-              class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 transform hover:scale-105"
-            >
-              جستجو 🔍
-            </button>
-          </form>
-        </div>
+  <!-- Announcement Banner -->
+  <div class="relative px-4 bg-red-50 dark:bg-red-950/20 overflow-hidden py-2 z-20">
+    <div class="absolute inset-0 bg-red-500/5"></div>
+    <div class="flex items-center justify-center relative flex-wrap gap-x-2 gap-y-2 max-w-7xl mx-auto">
+      <div class="flex items-center justify-center bg-red-500/10 h-7 rounded-full w-7">
+        <svg class="size-3 text-red-600 dark:text-red-400" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+          <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+          <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
+        </svg>
       </div>
+      <p class="text-center leading-snug lg:text-sm text-xs">
+        <span class="font-semibold">نسخه جدید ۲.۰</span>
+        <span class="items-center gap-1 inline-flex">راه‌اندازی شد!</span>
+        <span class="md:inline-block hidden"><span class="mx-1">&bull;</span> طراحی جدید و امکانات پیشرفته</span>
+      </p>
+      <a class="items-center font-medium inline-flex rounded-full [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 gap-1.5 justify-center py-2 transition-colors whitespace-nowrap bg-red-100 dark:bg-red-900/30 focus-visible:outline-red-500 h-7 hover:bg-red-200 dark:hover:bg-red-900/50 md:h-7.5 md:text-sm px-3 text-red-700 dark:text-red-300 text-xs" href="#" rel="noopener" target="_blank">
+        بیشتر بدانید <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Header / Hero Section -->
+  <header class="z-50 w-full -top-px backdrop-blur bg-white/80 dark:bg-gray-950/80 border-b sticky">
+    <div class="flex items-center h-[--nav-height] px-4">
+      <nav class="flex items-center flex-1 justify-between">
+        <div class="flex items-center ml-1 space-x-6">
+          <a class="flex items-center gap-2 font-medium align-middle font-heading text-foreground text-xl tracking-wide" href="/">
+            <svg class="size-6 opacity-90" height="24" width="24" viewBox="0 0 24 24">
+              <defs>
+                <filter height="140%" id="shadow-blur" width="140%" x="-20%" y="-20%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="1"/>
+                </filter>
+              </defs>
+              <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+              <path d="M12 19a1 1 0 0 1 1 1v2a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1 -1m-4.95 -2.05a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 1 1 -1.414 -1.414l1.414 -1.414a1 1 0 0 1 1.414 0m11.314 0l1.414 1.414a1 1 0 0 1 -1.414 1.414l-1.414 -1.414a1 1 0 0 1 1.414 -1.414m-5.049 -9.836a5 5 0 1 1 -2.532 9.674a5 5 0 0 1 2.532 -9.674m-9.315 3.886a1 1 0 0 1 0 2h-2a1 1 0 0 1 0 -2zm18 0a1 1 0 0 1 0 2h-2a1 1 0 0 1 0 -2zm-16.364 -6.778l1.414 1.414a1 1 0 0 1 -1.414 1.414l-1.414 -1.414a1 1 0 0 1 1.414 -1.414m14.142 0a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 0 1 -1.414 -1.414l1.414 -1.414a1 1 0 0 1 1.414 0m-7.778 -3.222a1 1 0 0 1 1 1v2a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1 -1" fill="oklch(66.7% 0.295 322.15)" filter="url(#shadow-blur)"/>
+              <path d="M12 19a1 1 0 0 1 1 1v2a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1 -1m-4.95 -2.05a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 1 1 -1.414 -1.414l1.414 -1.414a1 1 0 0 1 1.414 0m11.314 0l1.414 1.414a1 1 0 0 1 -1.414 1.414l-1.414 -1.414a1 1 0 0 1 1.414 -1.414m-5.049 -9.836a5 5 0 1 1 -2.532 9.674a5 5 0 0 1 2.532 -9.674m-9.315 3.886a1 1 0 0 1 0 2h-2a1 1 0 0 1 0 -2zm18 0a1 1 0 0 1 0 2h-2a1 1 0 0 1 0 -2zm-16.364 -6.778l1.414 1.414a1 1 0 0 1 -1.414 1.414l-1.414 -1.414a1 1 0 0 1 1.414 -1.414m14.142 0a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 0 1 -1.414 -1.414l1.414 -1.414a1 1 0 0 1 1.414 0m-7.778 -3.222a1 1 0 0 1 1 1v2a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1 -1" fill="currentColor"/>
+            </svg>
+            <div>بهترین‌ها</div>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <div class="lg:flex hidden">
+            <ul class="items-center md:flex hidden space-x-3">
+              <li><a class="flex items-center justify-center px-2 h-8 relative text-muted-foreground hover:text-foreground transition-colors" href="#">صفحه اصلی</a></li>
+              <li><a class="flex items-center justify-center px-2 h-8 relative text-muted-foreground hover:text-foreground transition-colors" href="#">دسته‌بندی‌ها</a></li>
+              <li><a class="flex items-center justify-center px-2 h-8 relative text-muted-foreground hover:text-foreground transition-colors" href="#">شهرها</a></li>
+              <li><a class="flex items-center justify-center px-2 h-8 relative text-red-600 dark:text-red-400 font-medium" href="#">تماس با ما</a></li>
+            </ul>
+            <div class="bg-border h-8 mx-6 w-px"></div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button class="flex items-center justify-center border h-10 hover:text-foreground rounded-full text-muted-foreground transition-colors w-10 hidden md:flex" aria-label="جستجو">
+              <svg class="size-5" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                <path d="M21 21l-6 -6"/>
+              </svg>
+            </button>
+            <button class="flex items-center justify-center border h-10 hover:text-foreground rounded-full text-muted-foreground transition-colors w-10 hidden md:flex" aria-label="تغییر تم">
+              <svg class="size-5" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
     </div>
   </header>
 
-  <!-- Categories Section -->
-  <section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">دسته‌بندی‌های محبوب</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {categories.map(category => (
-          <a 
-            href={`/category/${category.slug}`}
-            class="card p-6 text-center hover:shadow-lg transition-all duration-200 group"
-          >
-            <div class="text-5xl mb-3 transform group-hover:scale-110 transition-transform duration-200">
-              {category.icon}
+  <!-- Main Hero Section -->
+  <main class="overflow-hidden">
+    <div class="relative" id="hero">
+      <div class="flex items-center justify-center relative docs-home-container md:min-h-[60lvh] md:py-40 min-h-[40lvh] overflow-clip py-16" id="main-content">
+        <div class="absolute overflow-clip pointer-events-none inset-x-0 inset-y-0 lg:inset-x-4 m-auto lg:rounded-b-[4rem]" aria-hidden="true">
+          <div class="relative w-full h-full">
+            <canvas data-particle-animation data-particle-ease="70" data-particle-max-size="3" data-particle-quantity="30" data-particle-staticity="70"></canvas>
+            <div class="absolute inset-0 -z-10 blur-3xl overflow-clip pointer-events-none bg-gradient-to-b from-red-500/10 to-transparent"></div>
+          </div>
+        </div>
+        <div class="relative px-2 z-10 max-w-[800px] pb-10 text-center">
+          <div class="flex justify-center">
+            <h1 class="mx-auto bg-clip-text bg-gradient-to-b dark:text-transparent font-heading font-medium from-foreground/60 leading-12 lg:text-7xl mb-5 md:leading-15 pb-2 sm:text-6xl text-4xl to-foreground/90 via-foreground/70" data-mos="fade-down" data-mos-anchor="#main-content">
+              بهترین‌های شهرت رو پیدا کن! 🌟
+            </h1>
+          </div>
+          <p class="text-muted-foreground text-pretty mb-8 md:text-xl sm:text-lg max-w-[600px] mx-auto" data-mos="fade-down" data-mos-anchor="#main-content" data-mos-delay="150">
+            مرجع کامل معرفی بهترین کسب‌وکارهای ایران. از بهترین رستوران‌ها تا ارزان‌ترین کارواش‌ها، همه رو اینجا پیدا کن.
+          </p>
+          
+          <!-- Search Box -->
+          <div class="flex items-center justify-center flex-wrap gap-4" data-mos="fade-down" data-mos-anchor="#main-content" data-mos-delay="300">
+            <div class="bg-white dark:bg-gray-900 shadow-lg rounded-full border border-gray-200 dark:border-gray-800 p-2 max-w-2xl w-full">
+              <form class="flex flex-col sm:flex-row gap-2">
+                <input 
+                  type="text" 
+                  placeholder="چه چیزی جستجو می‌کنید؟ (مثلاً: کارواش، رستوران...)"
+                  class="flex-1 px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 bg-transparent"
+                />
+                <button 
+                  type="submit"
+                  class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <svg class="size-5" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                    <path d="M21 21l-6 -6"/>
+                  </svg>
+                  جستجو
+                </button>
+              </form>
             </div>
-            <h3 class="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
-              {category.name}
-            </h3>
-          </a>
-        ))}
+          </div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- Featured Cities Section -->
-  <section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">شهرهای پرطرفدار</h2>
-      <p class="text-center text-gray-600 mb-12 text-lg">بهترین کسب‌وکارهای شهرهای بزرگ ایران</p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {featuredCities.map(city => (
-          <a 
-            href={`/city/${city.slug}`}
-            class="card group overflow-hidden block"
-          >
-            <div class="relative h-48 overflow-hidden">
-              <img 
-                src={city.image} 
-                alt={city.name}
-                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
-                loading="lazy"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-              <div class="absolute bottom-4 right-4 text-white">
-                <h3 class="text-xl font-bold">{city.name}</h3>
-                <p class="text-sm text-gray-200">{city.count} کسب‌وکار</p>
+    <!-- Categories Section -->
+    <section class="docs-home-container md:py-12 my-12 py-6">
+      <div class="mx-auto max-w-6xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-gray-200">دسته‌بندی‌های محبوب</h2>
+          <p class="text-muted-foreground max-w-[600px] mx-auto">محبوب‌ترین دسته‌بندی‌های کسب‌وکارها در سراسر ایران</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categories.map(category => (
+            <a 
+              href={`/category/${category.slug}`}
+              class="relative transition-colors border dark:bg-muted/50 hover:ring-2 md:rounded-2xl overflow-clip ring-red-500/20 rounded-xl transition-shadow p-6 text-center group hover:shadow-lg"
+            >
+              <div class="text-5xl mb-3 transform group-hover:scale-110 transition-transform duration-200">
+                {category.icon}
               </div>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Recent Articles Section -->
-  <section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <div class="flex justify-between items-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-800">آخرین مقالات</h2>
-        <a href="/articles" class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2">
-          مشاهده همه
-          <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </a>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {recentArticles.map(article => (
-          <article class="card overflow-hidden hover:shadow-xl transition-all duration-300">
-            <div class="p-6">
-              <div class="flex items-center gap-2 mb-3">
-                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
-                  {article.city}
-                </span>
-                <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">
-                  {article.category}
-                </span>
-              </div>
-              <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-blue-600 transition-colors">
-                <a href={`/article/${article.slug}`}>{article.title}</a>
+              <h3 class="font-bold text-gray-800 dark:text-gray-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                {category.name}
               </h3>
-              <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">
-                {article.excerpt}
-              </p>
-              <a 
-                href={`/article/${article.slug}`}
-                class="btn btn-primary w-full justify-center"
-              >
-                مطالعه مقاله
-              </a>
-            </div>
-          </article>
-        ))}
+              <p class="text-sm text-muted-foreground mt-2">{category.count} کسب‌وکار</p>
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA Section -->
-  <section class="py-20 bg-gradient-to-l from-blue-600 to-blue-800 text-white">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-6">کسب‌وکار خود را معرفی کنید</h2>
-      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-        اگر صاحب کسب‌وکاری هستید، همین حالا به جمع بهترین‌ها بپیوندید و مشتریان بیشتری جذب کنید.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold transition-all duration-200 transform hover:scale-105">
-          ثبت رایگان کسب‌وکار
-        </button>
-        <button class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-bold transition-all duration-200">
-          اطلاعات بیشتر
-        </button>
+    <!-- Feature Side Image Section -->
+    <section class="overflow-hidden md:py-12 my-12 py-6" id="feature-side-image">
+      <div class="docs-home-container">
+        <div class="flex flex-col gap-16 md:gap-24">
+          <!-- Feature 1 -->
+          <div class="mx-auto max-w-6xl gap-8 grid md:gap-12 md:grid-cols-2 md:rounded-2xl rounded-lg">
+            <div class="flex items-center col-span-1" data-mos="fade-down">
+              <div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200">جستجوی هوشمند</h2>
+                <div>
+                  <p class="text-muted-foreground mr-auto max-w-md mt-4 text-pretty">
+                    با استفاده از الگوریتم‌های پیشرفته، بهترین نتایج را بر اساس موقعیت مکانی و نیازهای شما پیدا کنید.
+                  </p>
+                </div>
+                <div class="flex mt-8 z-20">
+                  <a class="items-center font-medium inline-flex rounded-full [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 gap-1.5 justify-center py-2 transition-colors whitespace-nowrap h-10 px-4 text-base focus-visible:outline-red-500 hover:text-red-600 dark:hover:text-red-400 border border-input hover:border-red-500/50" href="#">
+                    بیشتر بدانید →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="border md:rounded-2xl rounded-xl h-auto mb-auto overflow-hidden w-full" data-mos="fade-in">
+              <img alt="جستجوی هوشمند" class="object-cover h-full w-full" decoding="async" height="700" loading="lazy" src="https://picsum.photos/seed/search/1103/700" width="1103"/>
+            </div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="mx-auto max-w-6xl gap-8 grid md:gap-12 md:grid-cols-2 md:rounded-2xl rounded-lg">
+            <div class="flex items-center col-span-1 md:order-last" data-mos="fade-down">
+              <div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200">نظرات واقعی کاربران</h2>
+                <div>
+                  <p class="text-muted-foreground mr-auto max-w-md mt-4 text-pretty">
+                    از تجربیات واقعی کاربران دیگر بهره‌مند شوید و بهترین انتخاب را داشته باشید.
+                  </p>
+                </div>
+                <div class="flex mt-8 z-20">
+                  <a class="items-center font-medium inline-flex rounded-full [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 gap-1.5 justify-center py-2 transition-colors whitespace-nowrap h-10 px-4 text-base focus-visible:outline-red-500 hover:text-red-600 dark:hover:text-red-400 border border-input hover:border-red-500/50" href="#">
+                    مشاهده نظرات →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="border md:rounded-2xl rounded-xl h-auto mb-auto overflow-hidden w-full" data-mos="fade-in">
+              <img alt="نظرات کاربران" class="object-cover h-full w-full" decoding="async" height="700" loading="lazy" src="https://picsum.photos/seed/reviews/1217/700" width="1217"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Articles Section -->
+    <section class="docs-home-container md:py-12 my-12 py-6">
+      <div class="mx-auto max-w-6xl" id="articles">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">آخرین مقالات</h2>
+          <p class="text-muted-foreground max-w-[600px] mx-auto">تازه‌ترین راهنماها و معرفی‌های کسب‌وکارها</p>
+        </div>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {recentArticles.map(article => (
+            <article class="relative transition-colors border dark:bg-muted/50 hover:ring-2 md:rounded-2xl overflow-clip ring-red-500/20 rounded-xl transition-shadow group">
+              <div class="flex flex-col h-full">
+                <div class="relative h-48 overflow-hidden">
+                  <img 
+                    src={article.image} 
+                    alt={article.title}
+                    class="object-cover h-full w-full transform group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  <div class="absolute top-4 right-4 flex gap-2">
+                    <span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      {article.category}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-col p-6 relative h-full justify-between">
+                  <div>
+                    <div class="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
+                      <span>{article.city}</span>
+                      <span>•</span>
+                      <span>{article.readTime}</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
+                      <a href={`/posts/${article.slug}`}>{article.title}</a>
+                    </h3>
+                    <p class="text-muted-foreground text-sm mb-4 line-clamp-3">
+                      {article.excerpt}
+                    </p>
+                  </div>
+                  <div class="flex items-center justify-between mt-4">
+                    <span class="text-xs text-muted-foreground">{article.date}</span>
+                    <a 
+                      href={`/posts/${article.slug}`}
+                      class="text-red-600 dark:text-red-400 font-medium text-sm hover:underline flex items-center gap-1"
+                    >
+                      ادامه مطلب
+                      <svg class="size-4 rotate-180" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+                        <path d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="text-center mt-12">
+          <a class="items-center font-medium inline-flex rounded-full [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 gap-1.5 justify-center py-3 transition-colors whitespace-nowrap h-12 px-6 text-base border border-red-500 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20" href="/posts">
+            مشاهده همه مقالات
+            <svg class="size-4 rotate-180" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+              <path d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="relative md:py-12 my-12 py-6" data-mos="fade-in">
+      <div class="relative overflow-clip docs-home-container bg-gradient-to-b from-red-50 to-white dark:from-red-950/20 dark:to-gray-950 md:py-32 py-20">
+        <div class="absolute overflow-clip pointer-events-none inset-x-0 inset-y-0 lg:inset-x-4 m-auto lg:rounded-[4rem]" aria-hidden="true">
+          <div class="relative w-full h-full">
+            <canvas data-particle-animation data-particle-ease="70" data-particle-max-size="3" data-particle-quantity="20" data-particle-staticity="80"></canvas>
+            <div class="absolute inset-0 -z-10 blur-3xl overflow-clip pointer-events-none cta-glow bg-red-500/10"></div>
+          </div>
+        </div>
+        <div class="relative mx-auto max-w-4xl px-4 text-center">
+          <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-200 text-pretty">
+            کسب‌وکار خود را معرفی کنید
+          </h2>
+          <p class="text-muted-foreground text-pretty mb-8 max-w-[600px] md:text-lg mx-auto">
+            اگر صاحب کسب‌وکاری هستید، همین حالا به جمع بهترین‌ها بپیوندید و مشتریان بیشتری جذب کنید.
+          </p>
+          <div class="flex items-center justify-center flex-wrap gap-4">
+            <a class="items-center font-medium inline-flex rounded-full [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 gap-1.5 justify-center py-3 transition-colors whitespace-nowrap h-12 px-6 text-base bg-red-600 focus-visible:outline-red-500 hover:bg-red-700 text-white" href="#">
+              ثبت رایگان کسب‌وکار
+            </a>
+            <a class="items-center font-medium inline-flex rounded-full [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 gap-1.5 justify-center py-3 transition-colors whitespace-nowrap h-12 px-6 text-base focus-visible:outline-red-500 hover:text-red-600 dark:hover:text-red-400 bg-transparent hover:bg-red-50 dark:hover:bg-red-950/20" href="#">
+              اطلاعات بیشتر
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-300 py-12">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-        <div>
-          <h3 class="text-white text-xl font-bold mb-4">بهترین‌ها</h3>
-          <p class="text-gray-400 leading-relaxed">
-            مرجع کامل معرفی بهترین کسب‌وکارهای ایران. ما به شما کمک می‌کنیم بهترین خدمات را در شهر خود پیدا کنید.
-          </p>
+  <footer class="mt-8 bg-white dark:bg-gray-950 border-t text-foreground">
+    <div class="docs-site-container pb-16 pt-8">
+      <div class="grid gap-8 grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 text-sm">
+        <div class="flex flex-col items-start">
+          <a class="flex items-center gap-2 font-medium align-middle font-heading text-foreground text-xl tracking-wide" href="/">
+            <svg class="size-6 opacity-90" height="24" width="24" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+              <path d="M12 19a1 1 0 0 1 1 1v2a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1 -1m-4.95 -2.05a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 1 1 -1.414 -1.414l1.414 -1.414a1 1 0 0 1 1.414 0m11.314 0l1.414 1.414a1 1 0 0 1 -1.414 1.414l-1.414 -1.414a1 1 0 0 1 1.414 -1.414m-5.049 -9.836a5 5 0 1 1 -2.532 9.674a5 5 0 0 1 2.532 -9.674m-9.315 3.886a1 1 0 0 1 0 2h-2a1 1 0 0 1 0 -2zm18 0a1 1 0 0 1 0 2h-2a1 1 0 0 1 0 -2zm-16.364 -6.778l1.414 1.414a1 1 0 0 1 -1.414 1.414l-1.414 -1.414a1 1 0 0 1 1.414 -1.414m14.142 0a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 0 1 -1.414 -1.414l1.414 -1.414a1 1 0 0 1 1.414 0m-7.778 -3.222a1 1 0 0 1 1 1v2a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1 -1" fill="currentColor"/>
+            </svg>
+            <div>بهترین‌ها</div>
+          </a>
+          <div class="flex gap-3 flex-wrap mt-3">
+            <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#" aria-label="اینستاگرام">
+              <svg class="h-5 w-5" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#" aria-label="توییتر">
+              <svg class="h-5 w-5" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+              </svg>
+            </a>
+            <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#" aria-label="تلگرام">
+              <svg class="h-5 w-5" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </a>
+          </div>
+          <div class="mt-4 text-foreground/60 text-xs">
+            <p>© ۱۴۰۳ بهترین‌ها</p>
+          </div>
         </div>
-        <div>
-          <h4 class="text-white font-bold mb-4">دسترسی سریع</h4>
-          <ul class="space-y-2">
-            <li><a href="/" class="hover:text-white transition-colors">صفحه اصلی</a></li>
-            <li><a href="/cities" class="hover:text-white transition-colors">شهرها</a></li>
-            <li><a href="/categories" class="hover:text-white transition-colors">دسته‌بندی‌ها</a></li>
-            <li><a href="/articles" class="hover:text-white transition-colors">مقالات</a></li>
-          </ul>
+        <div class="flex flex-col gap-2">
+          <h3 class="font-medium">دسترسی سریع</h3>
+          <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#">صفحه اصلی</a>
+          <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#">دسته‌بندی‌ها</a>
+          <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#">شهرها</a>
+          <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="#">مقالات</a>
         </div>
-        <div>
-          <h4 class="text-white font-bold mb-4">دسته‌بندی‌ها</h4>
-          <ul class="space-y-2">
-            {categories.slice(0, 4).map(cat => (
-              <li><a href={`/category/${cat.slug}`} class="hover:text-white transition-colors">{cat.name}</a></li>
-            ))}
-          </ul>
+        <div class="flex flex-col gap-2">
+          <h3 class="font-medium">دسته‌بندی‌ها</h3>
+          {categories.slice(0, 4).map(cat => (
+            <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href={`/category/${cat.slug}`}>{cat.name}</a>
+          ))}
         </div>
-        <div>
-          <h4 class="text-white font-bold mb-4">تماس با ما</h4>
-          <ul class="space-y-2 text-gray-400">
-            <li>📧 info@behtarinha.ir</li>
-            <li>📞 ۰۲۱-۱۲۳۴۵۶۷۸</li>
-            <li>📍 تهران، ایران</li>
-          </ul>
+        <div class="flex flex-col gap-2">
+          <h3 class="font-medium">تماس با ما</h3>
+          <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="mailto:info@behtarinha.ir">📧 info@behtarinha.ir</a>
+          <a class="hover:text-red-600 dark:hover:text-red-400 text-muted-foreground transition-colors" href="tel:02112345678">📞 ۰۲۱-۱۲۳۴۵۶۷۸</a>
+          <span class="text-muted-foreground">📍 تهران، ایران</span>
         </div>
-      </div>
-      <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-        <p>© ۱۴۰۳ سایت بهترین‌ها. تمامی حقوق محفوظ است.</p>
       </div>
     </div>
   </footer>
 </Layout>
 
 <style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
