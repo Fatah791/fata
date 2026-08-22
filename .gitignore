@@ -1,17 +1,30 @@
-```
-# Astro build artifacts
-.astro/
+```gitignore
+# Build artifacts
+dist/
+build/
+*.js
+*.ts
+*.jsx
+*.tsx
 
 # Dependencies
 node_modules/
 
+# Cache directories
+.cache/
+.output/
+
 # Environment variables
 .env
 .env.local
-.env.*
+*.env.*
 
 # Logs
 *.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
 
 # Editor files
 .vscode/
@@ -20,12 +33,24 @@ node_modules/
 *.swo
 *.tmp
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Python (if applicable)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+*.log
 
-# Build outputs
-dist/
-build/
-target/
+# Astro-specific
+.astroturf/
 ```
