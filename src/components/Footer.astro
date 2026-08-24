@@ -1,30 +1,67 @@
 ---
 ---
 
-<footer class="site-footer bg-transparent text-muted">
+<footer class="site-footer">
   <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div>
-        <h4 class="text-white font-bold mb-3">بهترین‌ها</h4>
-        <p class="text-muted">مرجع معرفی برترین کسب‌وکارها و مقالات آموزشی. ما تلاش می‌کنیم تجربه‌ای مطمئن و خوانا برای کاربران بسازیم.</p>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <div class="logo-icon"><span>ب</span></div>
+          <span class="logo-text">بهترینها</span>
+        </a>
+        <p class="footer-desc">مرجع معرفی برترین کسبوکارها و مقالات آموزشی.</p>
       </div>
-      <div>
-        <h5 class="text-white font-semibold mb-3">دسترسی سریع</h5>
-        <ul class="space-y-2 text-sm text-muted">
-          <li><a href="/" class="hover:text-accent">صفحه اصلی</a></li>
-          <li><a href="/posts" class="hover:text-accent">مقالات</a></li>
-          <li><a href="/categories" class="hover:text-accent">دسته‌بندی‌ها</a></li>
+
+      <div class="footer-section">
+        <h4 class="footer-title">دسترسی سریع</h4>
+        <ul class="footer-links">
+          <li><a href="/">صفحه اصلی</a></li>
+          <li><a href="/posts">مقالات</a></li>
+          <li><a href="/cities">شهرها</a></li>
         </ul>
       </div>
-      <div>
-        <h5 class="text-white font-semibold mb-3">تماس</h5>
-        <p class="text-sm text-muted">📧 info@behtarinha.ir</p>
-        <p class="text-sm text-muted">📞 ۰۲۱-۱۲۳۴۵۶۷۸</p>
+
+      <div class="footer-section">
+        <h4 class="footer-title">دستهبندیها</h4>
+        <ul class="footer-links">
+          <li><a href="/category/restaurant">رستوران</a></li>
+          <li><a href="/category/cafe">کافیشاپ</a></li>
+          <li><a href="/category/carwash">کارواش</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">تماس</h4>
+        <ul class="footer-contact">
+          <li>📧 info@behtarinha.ir</li>
+          <li>📞 ۰۲۱-۱۲۳۴۵۶۷۸</li>
+        </ul>
       </div>
     </div>
 
-    <div class="mt-8 text-center text-sm text-muted">
-      © ۱۴۰۳ بهترین‌ها — تمامی حقوق محفوظ است.
+    <div class="footer-bottom">
+      <p>© ۱۴۰۳ بهترینها — تمامی حقوق محفوظ است.</p>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer { background: var(--bg-secondary); border-top: 1px solid var(--glass-border); padding: 4rem 0 2rem; margin-top: 6rem; position: relative; }
+  .site-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 200px; background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.05) 0%, transparent 70%); pointer-events: none; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .footer-grid { grid-template-columns: 1fr; } }
+  .footer-brand { max-width: 320px; }
+  .footer-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; margin-bottom: 1.25rem; }
+  .footer-logo .logo-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; color: white; }
+  .footer-logo .logo-text { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
+  .footer-desc { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin: 0; }
+  .footer-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 0 0 1.25rem 0; }
+  .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .footer-links a { font-size: 0.9rem; color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+  .footer-links a:hover { color: var(--accent-primary); }
+  .footer-contact { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .footer-contact li { font-size: 0.9rem; color: var(--text-secondary); }
+  .footer-bottom { display: flex; align-items: center; justify-content: center; padding-top: 2rem; border-top: 1px solid var(--glass-border); }
+  .footer-bottom p { margin: 0; font-size: 0.875rem; color: var(--text-muted); }
+</style>

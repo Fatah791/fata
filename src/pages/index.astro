@@ -4,16 +4,8 @@ import Footer from '../components/Footer.astro';
 
 export const prerender = true;
 
-// داده‌های نمونه برای تست طراحی (بعداً از Keystone گرفته می‌شود)
-const featuredCities = [
-  { name: 'اصفهان', slug: 'اصفهان', image: 'https://picsum.photos/seed/isfahan/400/300', count: 120 },
-  { name: 'تهران', slug: 'تهران', image: 'https://picsum.photos/seed/tehran/400/300', count: 250 },
-  { name: 'شیراز', slug: 'شیراز', image: 'https://picsum.photos/seed/shiraz/400/300', count: 95 },
-  { name: 'مشهد', slug: 'مشهد', image: 'https://picsum.photos/seed/mashhad/400/300', count: 180 },
-];
-
 const categories = [
-  { name: 'کافی‌شاپ', slug: 'کافی-شاپ', icon: '☕' },
+  { name: 'کافیشاپ', slug: 'کافی-شاپ', icon: '☕' },
   { name: 'رستوران', slug: 'رستوران', icon: '🍽️' },
   { name: 'کارواش', slug: 'کارواش', icon: '🚗' },
   { name: 'آرایشگاه', slug: 'آرایشگاه', icon: '💇' },
@@ -22,99 +14,89 @@ const categories = [
 ];
 
 const recentArticles = [
-  { 
-    title: 'چگونه مقاله‌ای مؤثر بنویسیم؟',
-    slug: 'sample-article',
-    excerpt: 'راهنمای عملی برای نوشتن مقالات واضح، خوانا و حرفه‌ای — شامل ساختار، پاراگراف‌بندی و مثال‌های عملی.',
-    city: 'تهران',
-    category: 'مقالات'
-  },
-  { 
-    title: 'بهترین کارواش‌های اصفهان - راهنمای کامل ۱۴۰۳', 
-    slug: 'بهترین-کارواش-اصفهان',
-    excerpt: 'لیست کاملی از بهترین و ارزان‌ترین کارواش‌های اصفهان با آدرس و شماره تماس...',
-    city: 'اصفهان',
-    category: 'کارواش'
-  },
-  { 
-    title: 'ارزان‌ترین رستوران‌های تهران با کیفیت عالی', 
-    slug: 'ارزان-رستوران-تهران',
-    excerpt: 'معرفی رستوران‌های اقتصادی تهران که کیفیت غذای فوق‌العاده‌ای دارند...',
-    city: 'تهران',
-    category: 'رستوران'
-  },
-  { 
-    title: 'لوکس‌ترین کافی‌شاپ‌های شیراز کجاست؟', 
-    slug: 'لوکس-کافی-شاپ-شیراز',
-    excerpt: 'اگر به دنبال تجربه‌ای خاص در شیراز هستید، این کافی‌شاپ‌ها را از دست ندهید...',
-    city: 'شیراز',
-    category: 'کافی‌شاپ'
-  },
+  { title: 'چگونه مقالهای مؤثر بنویسیم؟', slug: 'sample-article', excerpt: 'راهنمای عملی برای نوشتن مقالات واضح، خوانا و حرفهای.', city: 'تهران', category: 'مقالات' },
+  { title: 'بهترین کارواشهای اصفهان', slug: 'بهترین-کارواش-اصفهان', excerpt: 'لیست کاملی از بهترین کارواشهای اصفهان...', city: 'اصفهان', category: 'کارواش' },
+  { title: 'ارزانترین رستورانهای تهران', slug: 'ارزان-رستوران-تهران', excerpt: 'معرفی رستورانهای اقتصادی تهران...', city: 'تهران', category: 'رستوران' },
 ];
 ---
 
-<Layout 
-  title="بهترین‌ها | معرفی بهترین کسب‌وکارهای شهر شما"
-  description="سایت بهترین‌ها - مرجع کامل معرفی بهترین کسب‌وکارهای ایران. بهترین رستوران‌ها، کافی‌شاپ‌ها، کارواش‌ها و خدمات هر شهر را اینجا پیدا کنید."
->
-  <!-- Hero (modern) -->
-  <section class="page-hero">
-    <div class="hero-card">
-      <h1 class="text-4xl font-extrabold mb-3">بهترین‌ها — راهنمای جامع محلی و مقالات آموزشی</h1>
-      <p class="text-muted mb-6">پایگاهی برای یافتن بهترین کسب‌وکارها، خواندن مقالات تخصصی و یادگیری روش‌های کاربردی برای رشد کسب‌وکار.</p>
+<Layout title="بهترینها | معرفی بهترین کسبوکارهای شهر شما" description="مرجع کامل معرفی بهترین کسبوکارهای ایران.">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h1 class="hero-title">بهترینها — <span class="text-gradient">راهنمای جامع محلی</span></h1>
+          <p class="hero-description">پایگاهی برای یافتن بهترین کسبوکارها، خواندن مقالات تخصصی و یادگیری روشهای کاربردی برای رشد کسبوکار.</p>
+          <div class="hero-actions">
+            <a href="/posts/sample-article" class="btn btn-primary">مطالعه نمونه</a>
+            <a href="/posts" class="btn btn-secondary">تمام مقالات</a>
+          </div>
+        </div>
 
-      <div class="flex gap-3 flex-col sm:flex-row">
-        <a href="/posts/sample-article" class="btn btn-primary">مطالعهٔ نمونه</a>
-        <a href="/posts" class="btn btn-outline">تمام مقالات</a>
-      </div>
-    </div>
-
-    <div class="hero-card">
-      <h4 class="font-bold mb-3">جستجوی سریع</h4>
-      <form class="flex gap-2">
-        <input placeholder="چه چیزی می‌خواهید پیدا کنید؟" class="flex-1 px-4 py-3 rounded-lg bg-surface border border-white/6 text-text" />
-        <button class="btn btn-primary">جستجو</button>
-      </form>
-
-      <div class="mt-6">
-        <h5 class="text-sm text-muted mb-2">دسته‌های محبوب</h5>
-        <div class="flex flex-wrap gap-2">
-          {categories.map(c => (
-            <a href={`/category/${c.slug}`} class="px-3 py-2 rounded-lg bg-card text-muted text-sm border border-white/6">{c.icon} {c.name}</a>
-          ))}
+        <div class="hero-search-card">
+          <h3 class="search-title">جستجوی سریع</h3>
+          <form class="search-form">
+            <input type="search" placeholder="چه چیزی میخواهید پیدا کنید؟" class="search-input" />
+            <button type="submit" class="btn btn-primary">جستجو</button>
+          </form>
+          <div class="popular-categories">
+            <h5 class="categories-title">دستههای محبوب</h5>
+            <div class="categories-list">
+              {categories.map(c => (<a href={`/category/${c.slug}`} class="category-pill">{c.icon} {c.name}</a>))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Featured Articles -->
-  <section class="py-12">
+  <!-- Articles Section -->
+  <section class="articles-section">
     <div class="container">
-      <h2 class="text-2xl font-bold mb-6">مقالات جدید</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="section-header">
+        <h2 class="section-title">مقالات جدید</h2>
+        <a href="/posts" class="view-all-link">مشاهده همه ←</a>
+      </div>
+      <div class="articles-grid">
         {recentArticles.map(article => (
-          <a href={`/posts/${article.slug}`} class="article-card p-5">
-            <h3 class="font-bold text-lg text-white mb-2">{article.title}</h3>
-            <p class="text-muted text-sm mb-4">{article.excerpt}</p>
-            <div class="text-sm text-muted">{article.city} • {article.category}</div>
+          <a href={`/posts/${article.slug}`} class="article-card">
+            <h3>{article.title}</h3>
+            <p>{article.excerpt}</p>
+            <div class="article-meta">{article.city} • {article.category}</div>
           </a>
         ))}
       </div>
     </div>
   </section>
-
-  <!-- Footer slot -->
-  <slot name="footer">
-    <!-- default footer -->
-    <Footer />
-  </slot>
+  <Footer />
 </Layout>
 
 <style>
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+  .hero-section { padding: 4rem 0; }
+  .hero-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+  @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1fr 450px; gap: 3rem; } .hero-section { padding: 6rem 0; } }
+  .hero-content { animation: fadeIn 0.6s ease forwards; }
+  .hero-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; }
+  .hero-description { font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .hero-search-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; position: relative; overflow: hidden; }
+  .hero-search-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%); animation: heroGlow 10s ease-in-out infinite; }
+  @keyframes heroGlow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10%, 10%); } }
+  .search-title { position: relative; z-index: 1; font-size: 1.25rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); }
+  .search-form { position: relative; z-index: 1; display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .search-form .search-input { flex: 1; padding: 1rem 1.5rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-primary); font-size: 1rem; font-family: inherit; }
+  .search-form .search-input::placeholder { color: var(--text-muted); }
+  .search-form .search-input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+  .popular-categories { position: relative; z-index: 1; }
+  .categories-title { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; }
+  .categories-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .articles-section { padding: 4rem 0; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+  .section-title { font-size: 1.75rem; font-weight: 700; margin: 0; }
+  .view-all-link { font-size: 0.95rem; color: var(--accent-primary); text-decoration: none; transition: color 0.2s ease; }
+  .view-all-link:hover { color: var(--accent-secondary); }
+  .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+  .article-meta { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
