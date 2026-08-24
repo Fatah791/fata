@@ -22,6 +22,13 @@ const categories = [
 
 const recentArticles = [
   { 
+    title: 'چگونه مقاله‌ای مؤثر بنویسیم؟',
+    slug: 'sample-article',
+    excerpt: 'راهنمای عملی برای نوشتن مقالات واضح، خوانا و حرفه‌ای — شامل ساختار، پاراگراف‌بندی و مثال‌های عملی.',
+    city: 'تهران',
+    category: 'مقالات'
+  },
+  { 
     title: 'بهترین کارواش‌های اصفهان - راهنمای کامل ۱۴۰۳', 
     slug: 'بهترین-کارواش-اصفهان',
     excerpt: 'لیست کاملی از بهترین و ارزان‌ترین کارواش‌های اصفهان با آدرس و شماره تماس...',
@@ -159,13 +166,13 @@ const recentArticles = [
                 </span>
               </div>
               <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-blue-600 transition-colors">
-                <a href={`/article/${article.slug}`}>{article.title}</a>
+                <a href={`/posts/${article.slug}`}>{article.title}</a>
               </h3>
               <p class="text-gray-600 mb-4 leading-relaxed line-clamp-3">
                 {article.excerpt}
               </p>
               <a 
-                href={`/article/${article.slug}`}
+                              href={`/posts/${article.slug}`}
                 class="btn btn-primary w-full justify-center"
               >
                 مطالعه مقاله
