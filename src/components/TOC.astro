@@ -1,0 +1,15 @@
+---
+export interface Props { headings?: Array<{id:string; text:string; level:number}> }
+const { headings = [] } = Astro.props;
+---
+
+<nav class="lg:sticky lg:top-24 p-4 rounded-xl border border-white/6 bg-surface hidden lg:block">
+  <h5 class="font-semibold mb-3">در این مقاله</h5>
+  <ul class="space-y-2 text-sm">
+    {headings.map(h => (
+      <li class={`pl-${Math.max(0, h.level-2)} text-muted`}>
+        <a href={`#${h.id}`} class="hover:text-accent transition-colors">{h.text}</a>
+      </li>
+    ))}
+  </ul>
+</nav>

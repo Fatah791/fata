@@ -1,0 +1,43 @@
+---
+---
+
+<header class="w-full border-b border-white/6 bg-transparent backdrop-blur-sm sticky top-0 z-40">
+  <div class="container flex items-center justify-between py-4">
+    <a href="/" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-accent to-blue-400 flex items-center justify-center text-white font-bold">ب</div>
+      <div class="hidden sm:block">
+        <div class="text-lg font-bold">بهترین‌ها</div>
+        <div class="text-xs text-muted">مرجع معرفی کسب‌وکارها</div>
+      </div>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <form class="hidden md:flex items-center bg-surface/80 border border-white/6 rounded-xl px-3 py-2 gap-2">
+        <input aria-label="جستجو" placeholder="جستجوی مقالات، شهرها، دسته‌ها..." class="bg-transparent outline-none placeholder:opacity-60 text-sm text-text" />
+        <button class="text-muted text-sm">جستجو</button>
+      </form>
+
+      <button id="theme-toggle" class="p-2 rounded-lg border border-white/6 text-muted hover:bg-white/2 transition-colors">تاریک/روشن</button>
+    </div>
+  </div>
+</header>
+
+<script>
+  // ساده: قابلیت تغییر تم (ذخیره در localStorage)
+  (function(){
+    const btn = document.getElementById('theme-toggle');
+    if(!btn) return;
+    const root = document.documentElement;
+    const current = localStorage.getItem('site-theme') || (root.classList.contains('dark') ? 'dark' : 'dark');
+    function apply(t){
+      if(t === 'light') { root.classList.remove('dark'); root.classList.add('light'); }
+      else { root.classList.remove('light'); root.classList.add('dark'); }
+      localStorage.setItem('site-theme', t);
+    }
+    apply(current);
+    btn.addEventListener('click', ()=>{
+      const next = root.classList.contains('dark') ? 'light' : 'dark';
+      apply(next);
+    });
+  })();
+</script>
