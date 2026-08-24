@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import TOC from '../../components/TOC.astro';
 
 export const prerender = true;
 
@@ -9,7 +10,7 @@ if (!slug) throw new Error('Slug not found');
 const post = await getEntry('posts', slug);
 
 if (!post) throw new Error('No post found for this slug');
-const { Content } = await render(post);
+const { Content, headings = [] } = await render(post);
 
 // Generate static pages
 export async function getStaticPaths() {
@@ -38,8 +39,8 @@ export async function getStaticPaths() {
     </main>
 
     <aside class="hidden lg:block">
-      <!-- TOC: extract headings from content rendering if available -->
-      <astro-island></astro-island>
+      <!-- TOC: extracted headings passed to component -->
+      <TOC headings={headings} />
     </aside>
   </div>
 </Layout>
