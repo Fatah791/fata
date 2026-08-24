@@ -35,9 +35,20 @@ const { title, description = 'سایت بهترین‌ها - معرفی بهتر
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen">
+		<a class="skip-link sr-only" href="#content">Skip to content</a>
 		<Header />
-		<main class="container py-10">
+		<main id="content" class="container py-10">
 			<slot />
 		</main>
+		<footer>
+			<slot name="footer" />
+		</footer>
+		<script>
+		  // small helper: add focus-visible support for skip link
+		  (function(){
+		    const s = document.querySelector('.skip-link');
+		    if(!s) return; s.addEventListener('keydown', e=>{});
+		  })();
+		</script>
 	</body>
 </html>
