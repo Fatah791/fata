@@ -25,21 +25,42 @@
   font-display: swap;
 }
 
-/* تنظیمات کلی سایت با جهت راست‌چین */
+/* تنظیمات کلی سایت با جهت راست‌چین و تم تاریک پیش‌فرض */
+:root {
+  --bg: #0b1220;
+  --surface: #0f1724;
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --accent: #60a5fa;
+  --card: rgba(255,255,255,0.03);
+}
+
 html {
   direction: rtl;
   text-align: right;
   font-family: 'Vazirmatn', sans-serif;
   line-height: 1.8;
   font-size: 16px;
-  background-color: #fafafa;
-  color: #1a1a1a;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* سبک روشن (در صورت نیاز) */
+html.light {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --muted: #6b7280;
+  --text: #111827;
+  --accent: #2563eb;
+  --card: #ffffff;
 }
 
 /* کلاس‌های کاربردی برای RTL */
@@ -56,10 +77,10 @@ body {
 /* استایل‌های پایه برای تایپوگرافی */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.25;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  color: #111827;
+  color: var(--text);
 }
 
 h1 { font-size: 2.25rem; }
@@ -69,17 +90,18 @@ h4 { font-size: 1.25rem; }
 
 p {
   margin-bottom: 1.25rem;
-  color: #374151;
+  color: var(--muted);
+  font-size: 1.0625rem;
 }
 
 a {
-  color: #2563eb;
+  color: var(--accent);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: #1d4ed8;
+  color: color-mix(in srgb, var(--accent) 80%, var(--text));
   text-decoration: underline;
 }
 
@@ -121,16 +143,18 @@ a:hover {
 
 /* کارت‌ها */
 .card {
-  background: white;
+  background: var(--surface);
+  color: var(--text);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  border: 1px solid rgba(255,255,255,0.03);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(2,6,23,0.7);
 }
 
 /* کانتینر اصلی */
@@ -138,4 +162,49 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+/* سبک‌های مخصوص صفحهٔ مقاله (خوانایی بالا) */
+.article-container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+  background: transparent;
+}
+
+.article-hero {
+  margin-bottom: 1.5rem;
+}
+
+.article-meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.article-content {
+  font-size: 1.125rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.article-content img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.article-content blockquote {
+  border-left: 4px solid rgba(96,165,250,0.15);
+  background: rgba(255,255,255,0.02);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  color: var(--text);
+}
+
+.article-content code, .article-content pre {
+  background: rgba(0,0,0,0.25);
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  color: #e6eef8;
 }

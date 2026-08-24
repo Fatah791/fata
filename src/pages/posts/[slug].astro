@@ -19,6 +19,20 @@ export async function getStaticPaths() {
 ---
 
 <Layout title={post.data.title}>
-  <h1>{post.data.title}</h1>
-  <Content />
+  <main class="article-container">
+    <header class="article-hero">
+      <h1 class="text-4xl font-extrabold">{post.data.title}</h1>
+      <div class="article-meta">{post.data.date ? new Date(post.data.date).toLocaleDateString('fa-IR') : ''} {post.data.readingTime ? ` • ${post.data.readingTime}` : ''}</div>
+      {post.data.image && <img src={post.data.image} alt={post.data.title} class="rounded-lg w-full h-auto" />}
+    </header>
+
+    <article class="article-content">
+      <Content />
+    </article>
+
+    <nav class="mt-12 flex justify-between text-sm text-gray-400">
+      <div></div>
+      <div></div>
+    </nav>
+  </main>
 </Layout>
