@@ -1,12 +1,8 @@
 {
-  "name": "@keystatic/templates-astro",
-  "version": "0.0.73",
+  "name": "behtarinha",
+  "version": "0.1.0",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Thinkmill/keystatic/",
-    "directory": "templates/astro"
-  },
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

@@ -35,14 +35,14 @@ const recentArticles = [
 
         <div class="hero-search-card">
           <h3 class="search-title">جستجوی سریع</h3>
-          <form class="search-form">
-            <input type="search" placeholder="چه چیزی میخواهید پیدا کنید؟" class="search-input" />
+          <form class="search-form" action="/posts" method="get" role="search">
+            <input type="search" name="q" placeholder="چه چیزی میخواهید پیدا کنید؟" class="search-input" aria-label="جستجو" />
             <button type="submit" class="btn btn-primary">جستجو</button>
           </form>
           <div class="popular-categories">
             <h5 class="categories-title">دستههای محبوب</h5>
             <div class="categories-list">
-              {categories.map(c => (<a href={`/category/${c.slug}`} class="category-pill">{c.icon} {c.name}</a>))}
+              {categories.map(c => (<a href={`/posts?q=${encodeURIComponent(c.name)}`} class="category-pill">{c.icon} {c.name}</a>))}
             </div>
           </div>
         </div>
@@ -78,22 +78,22 @@ const recentArticles = [
   .hero-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; }
   .hero-description { font-size: 1.125rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; }
   .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .hero-search-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; position: relative; overflow: hidden; }
+  .hero-search-card { background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-secondary); border-radius: 24px; padding: 2rem; position: relative; overflow: hidden; }
   .hero-search-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%); animation: heroGlow 10s ease-in-out infinite; }
   @keyframes heroGlow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10%, 10%); } }
   .search-title { position: relative; z-index: 1; font-size: 1.25rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-primary); }
   .search-form { position: relative; z-index: 1; display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
   .search-form .search-input { flex: 1; padding: 1rem 1.5rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-primary); font-size: 1rem; font-family: inherit; }
   .search-form .search-input::placeholder { color: var(--text-muted); }
-  .search-form .search-input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+  .search-form .search-input:focus { outline: none; border-color: var(--interactive-primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
   .popular-categories { position: relative; z-index: 1; }
   .categories-title { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; }
   .categories-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .articles-section { padding: 4rem 0; }
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
   .section-title { font-size: 1.75rem; font-weight: 700; margin: 0; }
-  .view-all-link { font-size: 0.95rem; color: var(--accent-primary); text-decoration: none; transition: color 0.2s ease; }
-  .view-all-link:hover { color: var(--accent-secondary); }
+  .view-all-link { font-size: 0.95rem; color: var(--text-brand); text-decoration: none; transition: color 0.2s ease; }
+  .view-all-link:hover { color: var(--text-accent); }
   .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
   .article-meta { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

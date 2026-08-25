@@ -1,14 +1,11 @@
 ---
 /**
- * Search Component - جستجوی پیشرفته با Debounce و Keyboard Navigation
+ * Search Component - جستجو با پشتیبانی از پیشنهادات و پاک‌سازی
+ * ناوبری جستجو از طریق فرم GET انجام می‌شود.
  */
 interface Props {
   placeholder?: string;
   value?: string;
-  onSearch?: (query: string) => void;
-  onClear?: () => void;
-  suggestions?: string[];
-  loading?: boolean;
   class?: string;
   'data-testid'?: string;
 }
@@ -16,22 +13,18 @@ interface Props {
 const {
   placeholder = 'جستجو...',
   value = '',
-  onSearch,
-  onClear,
-  suggestions = [],
-  loading = false,
   class: className = '',
   'data-testid': testId,
   ...attrs
 } = Astro.props;
 ---
 
-<div class="relative" data-testid={testId}>
+<div class={`relative ${className}`} data-search-root data-testid={testId}>
   <label for="search-input" class="sr-only">{placeholder}</label>
 
   <div class="relative">
     <svg
-      class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted pointer-events-none"
+      class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--text-muted)] pointer-events-none"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -42,30 +35,13 @@ const {
       <line x1="21" y1="21" x2="16.65" y2="16.65" />
     </svg>
 
-    {loading && (
-      <svg
-        class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-brand animate-spin"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="10" stroke-opacity="0.25" />
-        <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round" />
-      </svg>
-    )}
-
     <input
       {...attrs}
       id="search-input"
       type="search"
       value={value}
       placeholder={placeholder}
-      class="input input-md pl-10 pr-10 {loading ? 'pl-14' : ''} {value || suggestions.length ? 'rounded-b-none' : ''}"
-      aria-autocomplete={suggestions.length ? 'list' : 'none'}
-      aria-controls={suggestions.length ? `${testId}-suggestions` : undefined}
-      aria-expanded={suggestions.length > 0}
+      class="input input-md pl-10 pr-10"
       autocomplete="off"
       spellcheck="false"
     />
@@ -73,7 +49,7 @@ const {
     {value && (
       <button
         type="button"
-        class="absolute left-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-bg-tertiary transition-colors text-text-muted hover:text-text-primary"
+        class="absolute left-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-[var(--bg-tertiary)] transition-colors text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]"
         aria-label="پاک کردن جستجو"
         data-search-clear
       >
@@ -84,63 +60,32 @@ const {
       </button>
     )}
   </div>
-
-  {suggestions.length > 0 && (
-    <ul
-      id={`${testId}-suggestions`}
-      class="absolute top-full left-0 right-0 mt-1 glass-strong rounded-b-xl border border-border-primary border-t-0 shadow-2xl py-1 max-h-60 overflow-y-auto z-50 animate-scale-in"
-      role="listbox"
-      aria-label="پیشنهادات جستجو"
-    >
-      {suggestions.map((suggestion, index) => (
-        <li role="option" key={suggestion}>
-          <button
-            type="button"
-            class="w-full px-3 py-2 text-right text-sm hover:bg-bg-tertiary focus:bg-bg-tertiary focus:outline-none transition-colors flex items-center gap-2"
-            data-suggestion-value={suggestion}
-          >
-            <svg class="w-4 h-4 text-text-muted flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <span>{suggestion}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
-  )}
 </div>
 
 <script>
-  // Client-side search with debounce
+  // Client-side search enhancements: clear button visibility, suggestions UX.
+  // NOTE: frontmatter callbacks (onSearch/onClear) cannot be serialized from the
+  // server to the browser; navigation is handled via a plain GET form instead.
   (function() {
-    const search = document.currentScript?.parentElement;
-    if (!search) return;
+    const search = document.querySelector('[data-testid="header-search"], [data-search-root]');
+    const root = search ?? document.querySelector('input[type="search"]')?.closest('div');
+    if (!root) return;
 
-    const input = search.querySelector('input[type="search"]');
-    const clearBtn = search.querySelector('[data-search-clear]');
-    const suggestionsList = search.querySelector('[role="listbox"]');
-    const suggestionButtons = search.querySelectorAll('[data-suggestion-value]');
+    const input = root.querySelector('input[type="search"]') as HTMLInputElement | null;
+    const clearBtn = root.querySelector('[data-search-clear]');
+    const suggestionsList = root.querySelector('[role="listbox"]');
 
-    let debounceTimer: ReturnType<typeof setTimeout>;
-    const DEBOUNCE_MS = 300;
-
-    function handleInput(e: Event) {
-      const target = e.target as HTMLInputElement;
-      const value = target.value;
-
-      // Show/hide clear button
-      clearBtn?.classList.toggle('hidden', !value);
+    function handleInput() {
+      // Show/hide clear button based on current value
+      clearBtn?.classList.toggle('hidden', !input?.value);
 
       // Update aria-expanded
-      target.setAttribute('aria-expanded', suggestionsList?.children.length ? 'true' : 'false');
-
-      // Debounced search
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        if (onSearch) {
-          onSearch(value);
-        }
-      }, DEBOUNCE_MS);
+      input?.setAttribute(
+        'aria-expanded',
+        suggestionsList && suggestionsList.children.length && !suggestionsList.classList.contains('hidden')
+          ? 'true'
+          : 'false'
+      );
     }
 
     function handleClear() {
@@ -149,8 +94,7 @@ const {
         input.focus();
       }
       clearBtn?.classList.add('hidden');
-      if (onClear) onClear();
-      if (onSearch) onSearch('');
+      handleInput();
     }
 
     function handleSuggestionClick(e: MouseEvent) {
@@ -159,7 +103,7 @@ const {
       if (value && input) {
         input.value = value;
         input.focus();
-        if (onSearch) onSearch(value);
+        input.form?.submit();
       }
       suggestionsList?.classList.add('hidden');
       input?.setAttribute('aria-expanded', 'false');
@@ -174,13 +118,11 @@ const {
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          const nextIndex = (currentIndex + 1) % items.length;
-          items[nextIndex]?.focus();
+          items[(currentIndex + 1) % items.length]?.focus();
           break;
         case 'ArrowUp':
           e.preventDefault();
-          const prevIndex = (currentIndex - 1 + items.length) % items.length;
-          items[prevIndex]?.focus();
+          items[(currentIndex - 1 + items.length) % items.length]?.focus();
           break;
         case 'Enter':
           if (currentIndex >= 0) {
@@ -205,18 +147,19 @@ const {
     });
     input?.addEventListener('keydown', handleKeydown);
     clearBtn?.addEventListener('click', handleClear);
-
-    suggestionButtons.forEach(btn => {
+    root.querySelectorAll('[data-suggestion-value]').forEach(btn => {
       btn.addEventListener('click', handleSuggestionClick);
     });
 
     // Close suggestions on outside click
     document.addEventListener('click', (e: MouseEvent) => {
-      if (!search.contains(e.target as Node)) {
+      if (!root.contains(e.target as Node)) {
         suggestionsList?.classList.add('hidden');
         input?.setAttribute('aria-expanded', 'false');
       }
     });
+
+    handleInput();
   })();
 </script>
 

@@ -928,6 +928,11 @@ body::before {
   border: 0;
 }
 
+/* Visibility utility (used by Search clear button / suggestions) */
+.hidden {
+  display: none !important;
+}
+
 /* ===========================================
    📄 MARKDOWN/TYPOGRAPHY PROSE
    =========================================== */

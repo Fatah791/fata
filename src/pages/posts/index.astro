@@ -1,0 +1,130 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = true;
+
+const posts = await getCollection('posts');
+const q = Astro.url.searchParams.get('q')?.trim().toLowerCase() ?? '';
+
+const filtered = q
+  ? posts.filter(post => {
+      const haystacks = [post.data.title, post.body ?? ''].filter(Boolean);
+      return haystacks.some(text => text.toLowerCase().includes(q));
+    })
+  : posts;
+
+const sorted = filtered.sort(
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0)
+);
+---
+
+<Layout title="مقالات | بهترینها" description="آخرین مقالات و راهنماها">
+  <section class="posts-page">
+    <div class="container">
+      <header class="page-header">
+        <h1 class="page-title">مقالات</h1>
+        <form class="search-form" method="get" role="search">
+          <input
+            type="search"
+            name="q"
+            value={q}
+            placeholder="جستجو در مقالات..."
+            class="search-input"
+            aria-label="جستجو در مقالات"
+          />
+          <button type="submit" class="btn btn-primary">جستجو</button>
+        </form>
+      </header>
+
+      {q && (
+        <p class="results-info">
+          {filtered.length > 0
+            ? `${filtered.length} نتیجه برای «${q}»`
+            : `نتیجهای برای «${q}» پیدا نشد`}
+        </p>
+      )}
+
+      {sorted.length > 0 ? (
+        <div class="articles-grid">
+          {sorted.map(post => (
+            <a href={`/posts/${post.id}`} class="article-card">
+              {post.data.image && (
+                <img src={post.data.image} alt={post.data.title} loading="lazy" />
+              )}
+              <div class="article-card-body">
+                <h3>{post.data.title}</h3>
+                {post.data.date && (
+                  <time datetime={post.data.date.toISOString()}>
+                    {post.data.date.toLocaleDateString('fa-IR')}
+                  </time>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        !q && <p class="empty-state">هنوز مقالهای منتشر نشده است.</p>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .posts-page { padding: var(--space-16) 0; }
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+  .page-title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-weight-black);
+    margin: 0;
+  }
+  .search-form { display: flex; gap: var(--space-2); }
+  .search-input {
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    min-width: 220px;
+  }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+  }
+  .results-info {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-6);
+  }
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+  .article-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+  .article-card:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+  }
+  .article-card img { width: 100%; aspect-ratio: 5 / 3; object-fit: cover; }
+  .article-card-body { padding: var(--space-5); }
+  .article-card h3 { margin: 0 0 var(--space-2); color: var(--text-primary); }
+  .article-card time { font-size: var(--text-sm); color: var(--text-muted); }
+  .empty-state { color: var(--text-muted); }
+</style>

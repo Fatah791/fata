@@ -12,37 +12,6 @@ interface Props {
 const { class: className = '', 'data-testid': testId, ...attrs } = Astro.props;
 ---
 
-<script>
-  // Theme management logic - runs immediately to prevent flash
-  (function() {
-    const THEME_KEY = 'theme-preference';
-    const THEME_ATTR = 'data-theme';
-
-    type Theme = 'light' | 'dark' | 'system';
-
-    function getSystemTheme(): 'light' | 'dark' {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    function getStoredTheme(): Theme {
-      return (localStorage.getItem(THEME_KEY) as Theme) || 'system';
-    }
-
-    function setTheme(theme: Theme) {
-      localStorage.setItem(THEME_KEY, theme);
-      const resolvedTheme = theme === 'system' ? getSystemTheme() : theme;
-      document.documentElement.setAttribute(THEME_ATTR, resolvedTheme);
-      document.documentElement.classList.toggle('dark', resolvedTheme === 'dark');
-    }
-
-    // Initialize theme on load
-    const storedTheme = getStoredTheme();
-    const initialTheme = storedTheme === 'system' ? getSystemTheme() : storedTheme;
-    document.documentElement.setAttribute(THEME_ATTR, initialTheme);
-    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
-  })();
-</script>
-
 <div class="relative inline-flex items-center" data-testid={testId}>
   <button
     {...attrs}
@@ -144,7 +113,9 @@ const { class: className = '', 'data-testid': testId, ...attrs } = Astro.props;
 <script>
   // Client-side theme toggle with smooth transitions
   (function() {
-    const toggle = document.currentScript?.parentElement;
+    // Locate this component's root via its toggle button (document.currentScript
+    // doesn't work reliably in bundled Astro scripts)
+    const toggle = document.querySelector('[data-theme-toggle]')?.parentElement;
     if (!toggle) return;
 
     const trigger = toggle.querySelector('[data-theme-toggle]');

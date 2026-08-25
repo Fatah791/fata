@@ -34,6 +34,18 @@ const { title, description = 'سایت بهترینها - معرفی بهتری�
     <meta name="twitter:description" content={description} />
 
     <title>{title}</title>
+
+    <!-- Set theme before first paint to prevent flash of wrong theme -->
+    <script is:inline>
+      (function() {
+        try {
+          var t = localStorage.getItem('theme-preference') || 'system';
+          var dark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) { /* localStorage unavailable */ }
+      })();
+    </script>
   </head>
   <body class="min-h-screen flex flex-col">
     <a class="skip-link" href="#content">به محتوای اصلی بروید</a>
@@ -42,13 +54,5 @@ const { title, description = 'سایت بهترینها - معرفی بهتری�
       <slot />
     </main>
     <Footer />
-    <script>
-      // Focus visible support for skip link
-      (function() {
-        const skipLink = document.querySelector('.skip-link');
-        if (!skipLink) return;
-        skipLink.addEventListener('keydown', () => {});
-      })();
-    </script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 ---
-import { Button, Input, Search, ThemeToggle } from './ui';
+import { Search, ThemeToggle } from './ui';
 ---
 
 <header class="site-header">
@@ -15,8 +15,6 @@ import { Button, Input, Search, ThemeToggle } from './ui';
 
       <nav class="header-nav" role="navigation" aria-label="منوی اصلی">
         <a href="/posts" class="nav-link">مقالات</a>
-        <a href="/cities" class="nav-link">شهرها</a>
-        <a href="/categories" class="nav-link">دستهبندیها</a>
       </nav>
 
       <div class="header-actions">
@@ -49,9 +47,8 @@ import { Button, Input, Search, ThemeToggle } from './ui';
 <div id="mobile-menu" class="mobile-menu hidden" role="dialog" aria-label="منوی موبایل">
   <div class="mobile-menu-content glass-strong">
     <nav class="mobile-nav">
+      <a href="/" class="mobile-nav-link">صفحه اصلی</a>
       <a href="/posts" class="mobile-nav-link">مقالات</a>
-      <a href="/cities" class="mobile-nav-link">شهرها</a>
-      <a href="/categories" class="mobile-nav-link">دستهبندیها</a>
     </nav>
     <div class="mobile-search">
       <Search placeholder="جستجو در سایت..." />

@@ -1,6 +1,6 @@
-```
 # Astro build artifacts
 .astro/
+.vercel/
 
 # Dependencies
 node_modules/
