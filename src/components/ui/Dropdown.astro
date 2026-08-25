@@ -1,0 +1,184 @@
+---
+/**
+ * Dropdown Component - منوی کشویی پیشرفته با Keyboard Navigation
+ */
+interface Props {
+  trigger: string | AstroHTMLAttributes<'button'>['children'];
+  items: Array<{
+    label: string;
+    value: string;
+    icon?: string;
+    disabled?: boolean;
+    danger?: boolean;
+    divider?: boolean;
+  }>;
+  placeholder?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  disabled?: boolean;
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  trigger,
+  items,
+  placeholder = 'انتخاب کنید...',
+  value,
+  onChange,
+  disabled = false,
+  class: className = '',
+  'data-testid': testId,
+} = Astro.props;
+
+const selectedItem = items.find(item => item.value === value);
+---
+
+<div class="relative inline-block" data-testid={testId}>
+  <button
+    type="button"
+    class="btn btn-outline btn-sm w-full text-right justify-between gap-2"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-label={placeholder}
+    disabled={disabled}
+    data-dropdown-trigger
+  >
+    <span>{selectedItem?.label || placeholder}</span>
+    <svg class="w-4 h-4 flex-shrink-0 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </button>
+
+  <div
+    class="absolute top-full left-0 right-0 mt-1 glass-strong rounded-xl shadow-2xl border border-border-primary py-1 min-w-[200px] z-50 hidden animate-scale-in"
+    role="listbox"
+    aria-label={placeholder}
+    data-dropdown-menu
+  >
+    {items.map((item, index) => {
+      if (item.divider) {
+        return <hr class="my-1 border-border-primary" role="separator" />;
+      }
+      return (
+        <button
+          type="button"
+          role="option"
+          aria-selected={item.value === value}
+          aria-disabled={item.disabled}
+          disabled={item.disabled}
+          class={[
+            'w-full px-3 py-2 text-right text-sm transition-colors flex items-center gap-2',
+            'hover:bg-bg-tertiary focus:bg-bg-tertiary focus:outline-none',
+            item.danger ? 'text-error' : 'text-text-primary',
+            item.disabled && 'opacity-50 cursor-not-allowed',
+            item.value === value && 'bg-brand/10 text-brand',
+          ].join(' ')}
+          data-value={item.value}
+          data-dropdown-item
+        >
+          {item.icon && <span class="w-4 h-4 flex-shrink-0" aria-hidden="true">{item.icon}</span>}
+          <span>{item.label}</span>
+          {item.value === value && (
+            <svg class="w-4 h-4 ml-auto text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          )}
+        </button>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  // Client-side dropdown logic
+  (function() {
+    const dropdown = document.currentScript?.parentElement;
+    if (!dropdown) return;
+
+    const trigger = dropdown.querySelector('[data-dropdown-trigger]');
+    const menu = dropdown.querySelector('[data-dropdown-menu]');
+    const items = dropdown.querySelectorAll('[data-dropdown-item]');
+
+    let isOpen = false;
+
+    function open() {
+      isOpen = true;
+      menu?.classList.remove('hidden');
+      trigger?.setAttribute('aria-expanded', 'true');
+      document.addEventListener('click', handleOutsideClick);
+      document.addEventListener('keydown', handleKeydown);
+    }
+
+    function close() {
+      isOpen = false;
+      menu?.classList.add('hidden');
+      trigger?.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('keydown', handleKeydown);
+    }
+
+    function toggle() {
+      isOpen ? close() : open();
+    }
+
+    function handleOutsideClick(e: MouseEvent) {
+      if (!dropdown.contains(e.target as Node)) {
+        close();
+      }
+    }
+
+    function handleKeydown(e: KeyboardEvent) {
+      if (!isOpen) return;
+
+      const enabledItems = Array.from(items).filter(
+        (item) => !item.hasAttribute('disabled')
+      );
+      const currentIndex = enabledItems.findIndex(
+        (item) => item === document.activeElement
+      );
+
+      switch (e.key) {
+        case 'Escape':
+          close();
+          trigger?.focus();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          const nextIndex = (currentIndex + 1) % enabledItems.length;
+          (enabledItems[nextIndex] as HTMLElement)?.focus();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          const prevIndex = (currentIndex - 1 + enabledItems.length) % enabledItems.length;
+          (enabledItems[prevIndex] as HTMLElement)?.focus();
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          (document.activeElement as HTMLElement)?.click();
+          close();
+          break;
+        case 'Tab':
+          close();
+          break;
+      }
+    }
+
+    trigger?.addEventListener('click', toggle);
+
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        const value = item.getAttribute('data-value');
+        if (value && onChange) {
+          onChange(value);
+        }
+        close();
+      });
+    });
+  })();
+</script>
+
+<style>
+  /* Dropdown uses global button styles */
+</style>

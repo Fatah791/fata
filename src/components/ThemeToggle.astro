@@ -1,0 +1,274 @@
+---
+/**
+ * ThemeToggle Component - تغییر تم پیشرفته با انیمیشن
+ * پشتیبانی از: light, dark, system
+ * با انیمیشن تغییر و localStorage persistence
+ */
+interface Props {
+  class?: string;
+  'data-testid'?: string;
+}
+
+const { class: className = '', 'data-testid': testId, ...attrs } = Astro.props;
+---
+
+<script>
+  // Theme management logic - runs immediately to prevent flash
+  (function() {
+    const THEME_KEY = 'theme-preference';
+    const THEME_ATTR = 'data-theme';
+
+    type Theme = 'light' | 'dark' | 'system';
+
+    function getSystemTheme(): 'light' | 'dark' {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function getStoredTheme(): Theme {
+      return (localStorage.getItem(THEME_KEY) as Theme) || 'system';
+    }
+
+    function setTheme(theme: Theme) {
+      localStorage.setItem(THEME_KEY, theme);
+      const resolvedTheme = theme === 'system' ? getSystemTheme() : theme;
+      document.documentElement.setAttribute(THEME_ATTR, resolvedTheme);
+      document.documentElement.classList.toggle('dark', resolvedTheme === 'dark');
+    }
+
+    // Initialize theme on load
+    const storedTheme = getStoredTheme();
+    const initialTheme = storedTheme === 'system' ? getSystemTheme() : storedTheme;
+    document.documentElement.setAttribute(THEME_ATTR, initialTheme);
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+  })();
+</script>
+
+<div class="relative inline-flex items-center" data-testid={testId}>
+  <button
+    {...attrs}
+    type="button"
+    class="btn btn-ghost btn-sm p-2 rounded-full relative overflow-hidden"
+    aria-label="تغییر تم"
+    data-theme-toggle
+  >
+    <!-- Sun Icon (Light Mode) -->
+    <svg
+      class="w-5 h-5 transition-all duration-300 rotate-0 scale-100 text-amber-500"
+      data-theme-icon="sun"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="5" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    </svg>
+
+    <!-- Moon Icon (Dark Mode) -->
+    <svg
+      class="w-5 h-5 transition-all duration-300 -rotate-90 scale-0 text-blue-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      data-theme-icon="moon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+
+    <!-- System Icon (Auto) -->
+    <svg
+      class="w-5 h-5 transition-all duration-300 rotate-90 scale-0 text-gray-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      data-theme-icon="system"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <path d="M8 21h8M12 17v4" />
+    </svg>
+  </button>
+
+  <!-- Tooltip/Dropdown Menu -->
+  <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 glass-strong rounded-xl shadow-2xl border border-border-primary py-1 min-w-[140px] z-50 hidden animate-scale-in" data-theme-menu role="menu">
+    <button
+      type="button"
+      role="menuitemradio"
+      aria-checked="false"
+      class="w-full px-3 py-2 text-right text-sm flex items-center gap-2 hover:bg-bg-tertiary focus:bg-bg-tertiary focus:outline-none transition-colors"
+      data-theme-option="light"
+    >
+      <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+      <span>روشن</span>
+    </button>
+    <button
+      type="button"
+      role="menuitemradio"
+      aria-checked="false"
+      class="w-full px-3 py-2 text-right text-sm flex items-center gap-2 hover:bg-bg-tertiary focus:bg-bg-tertiary focus:outline-none transition-colors"
+      data-theme-option="dark"
+    >
+      <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+      <span>تیره</span>
+    </button>
+    <button
+      type="button"
+      role="menuitemradio"
+      aria-checked="false"
+      class="w-full px-3 py-2 text-right text-sm flex items-center gap-2 hover:bg-bg-tertiary focus:bg-bg-tertiary focus:outline-none transition-colors"
+      data-theme-option="system"
+    >
+      <svg class="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
+      </svg>
+      <span>سیستم</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Client-side theme toggle with smooth transitions
+  (function() {
+    const toggle = document.currentScript?.parentElement;
+    if (!toggle) return;
+
+    const trigger = toggle.querySelector('[data-theme-toggle]');
+    const menu = toggle.querySelector('[data-theme-menu]');
+    const options = toggle.querySelectorAll('[data-theme-option]');
+    const icons = {
+      sun: trigger?.querySelector('[data-theme-icon="sun"]'),
+      moon: trigger?.querySelector('[data-theme-icon="moon"]'),
+      system: trigger?.querySelector('[data-theme-icon="system"]'),
+    };
+
+    function updateIcons(theme: 'light' | 'dark' | 'system') {
+      // Reset all icons
+      Object.values(icons).forEach(icon => {
+        if (icon) {
+          icon.classList.add('-rotate-90', 'scale-0');
+          icon.classList.remove('rotate-0', 'scale-100');
+        }
+      });
+
+      // Show active icon
+      const activeIcon = icons[theme as keyof typeof icons];
+      if (activeIcon) {
+        activeIcon.classList.remove('-rotate-90', 'scale-0');
+        activeIcon.classList.add('rotate-0', 'scale-100');
+      }
+
+      // Update menu aria-checked
+      options.forEach(opt => {
+        const isActive = opt.getAttribute('data-theme-option') === theme;
+        opt.setAttribute('aria-checked', isActive.toString());
+      });
+    }
+
+    function applyTheme(theme: 'light' | 'dark' | 'system') {
+      // Add switching class to disable transitions temporarily
+      document.documentElement.classList.add('theme-switching');
+
+      if (theme === 'system') {
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', systemTheme);
+        document.documentElement.classList.toggle('dark', systemTheme === 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+
+      localStorage.setItem('theme-preference', theme);
+
+      // Remove switching class after a frame
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('theme-switching');
+      });
+
+      updateIcons(theme);
+    }
+
+    // Initialize
+    const stored = localStorage.getItem('theme-preference') as 'light' | 'dark' | 'system' || 'system';
+    applyTheme(stored);
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (localStorage.getItem('theme-preference') === 'system') {
+        applyTheme('system');
+      }
+    });
+
+    // Toggle menu
+    function toggleMenu() {
+      const isOpen = !menu?.classList.contains('hidden');
+      if (isOpen) {
+        menu?.classList.add('hidden');
+        trigger?.setAttribute('aria-expanded', 'false');
+      } else {
+        menu?.classList.remove('hidden');
+        trigger?.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    trigger?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Handle option clicks
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.getAttribute('data-theme-option') as 'light' | 'dark' | 'system';
+        applyTheme(theme);
+        menu?.classList.add('hidden');
+        trigger?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target as Node)) {
+        menu?.classList.add('hidden');
+        trigger?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Keyboard navigation
+    trigger?.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu();
+      } else if (e.key === 'Escape') {
+        menu?.classList.add('hidden');
+        trigger?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Cycle theme on double click
+    trigger?.addEventListener('dblclick', () => {
+      const themes: ('light' | 'dark' | 'system')[] = ['light', 'dark', 'system'];
+      const current = localStorage.getItem('theme-preference') as 'light' | 'dark' | 'system' || 'system';
+      const nextIndex = (themes.indexOf(current) + 1) % themes.length;
+      applyTheme(themes[nextIndex]);
+    });
+  })();
+</script>
+
+<style>
+  /* Theme toggle uses global button styles */
+</style>

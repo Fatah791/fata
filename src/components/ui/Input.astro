@@ -1,0 +1,104 @@
+---
+/**
+ * Input Component - فیلد ورودی مدرن، Accessible و با Validation
+ * سایزها: sm, md, lg
+ * حالتها: default, error, disabled
+ */
+interface Props {
+  type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url' | 'number';
+  size?: 'sm' | 'md' | 'lg';
+  label?: string;
+  placeholder?: string;
+  value?: string;
+  name?: string;
+  id?: string;
+  required?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  error?: string;
+  hint?: string;
+  autocomplete?: string;
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  type = 'text',
+  size = 'md',
+  label,
+  placeholder,
+  value,
+  name,
+  id = name || `input-${Math.random().toString(36).slice(2, 9)}`,
+  required = false,
+  disabled = false,
+  readonly = false,
+  error,
+  hint,
+  autocomplete,
+  class: className = '',
+  'data-testid': testId,
+  ...attrs
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'input-sm',
+  md: 'input-md',
+  lg: 'input-lg',
+};
+
+const inputClasses = [
+  'input',
+  sizeClasses[size],
+  error ? 'input-error' : '',
+  className,
+].filter(Boolean).join(' ');
+
+const errorId = error ? `${id}-error` : undefined;
+const hintId = hint ? `${id}-hint` : undefined;
+const describedBy = [errorId, hintId].filter(Boolean).join(' ') || undefined;
+---
+
+<div class="flex flex-col gap-1.5">
+  {label && (
+    <label for={id} class="text-sm font-medium text-text-secondary">
+      {label}
+      {required && <span class="text-error ml-1" aria-hidden="true">*</span>}
+    </label>
+  )}
+
+  <input
+    {...attrs}
+    type={type}
+    id={id}
+    name={name}
+    value={value}
+    placeholder={placeholder}
+    required={required}
+    disabled={disabled}
+    readonly={readonly}
+    autocomplete={autocomplete}
+    aria-invalid={error ? 'true' : 'false'}
+    aria-describedby={describedBy}
+    aria-required={required}
+    class={inputClasses}
+    data-testid={testId}
+  />
+
+  {error && (
+    <p id={errorId} class="text-xs text-error flex items-center gap-1" role="alert">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      {error}
+    </p>
+  )}
+
+  {hint && !error && (
+    <p id={hintId} class="text-xs text-text-muted">{hint}</p>
+  )}
+</div>
+
+<style>
+  /* Input styles are in global styles.css */
+</style>

@@ -1,0 +1,22 @@
+---
+/**
+ * Section Component - بخش‌های استاندارد صفحه
+ */
+interface Props {
+  class?: string;
+  id?: string;
+  'data-testid'?: string;
+}
+
+const { class: className = '', id, 'data-testid': testId, ...attrs } = Astro.props;
+
+const classes = ['section', className].filter(Boolean).join(' ');
+---
+
+<section {...attrs} id={id} class={classes} data-testid={testId}>
+  <slot />
+</section>
+
+<style>
+  /* Section styles are in global styles.css */
+</style>

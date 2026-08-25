@@ -1,4 +1,5 @@
 ---
+import { Button, Input, Search, ThemeToggle } from './ui';
 ---
 
 <header class="site-header">
@@ -12,30 +13,31 @@
         </div>
       </a>
 
-      <nav class="header-nav">
+      <nav class="header-nav" role="navigation" aria-label="منوی اصلی">
         <a href="/posts" class="nav-link">مقالات</a>
         <a href="/cities" class="nav-link">شهرها</a>
         <a href="/categories" class="nav-link">دستهبندیها</a>
       </nav>
 
       <div class="header-actions">
-        <form class="header-search">
-          <input type="search" placeholder="جستجو..." aria-label="جستجو" />
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-          </svg>
-        </form>
-        <button id="theme-toggle" class="theme-btn" aria-label="تغییر تم">
-          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        </button>
-        <button id="menu-toggle" class="menu-btn" aria-label="منو">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        <Search
+          placeholder="جستجو..."
+          class="header-search"
+        />
+
+        <ThemeToggle />
+
+        <button
+          id="menu-toggle"
+          class="menu-btn btn btn-ghost btn-sm p-2"
+          aria-label="منو"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
       </div>
@@ -43,72 +45,287 @@
   </div>
 </header>
 
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu hidden" role="dialog" aria-label="منوی موبایل">
+  <div class="mobile-menu-content glass-strong">
+    <nav class="mobile-nav">
+      <a href="/posts" class="mobile-nav-link">مقالات</a>
+      <a href="/cities" class="mobile-nav-link">شهرها</a>
+      <a href="/categories" class="mobile-nav-link">دستهبندیها</a>
+    </nav>
+    <div class="mobile-search">
+      <Search placeholder="جستجو در سایت..." />
+    </div>
+  </div>
+</div>
+
 <style>
   .site-header {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(10, 10, 15, 0.8);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: var(--bg-glass);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-primary);
   }
-  .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; gap: 2rem; }
-  .header-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; transition: transform 0.3s ease; }
-  .header-logo:hover { transform: scale(1.02); }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) 0;
+    gap: var(--space-4);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .header-logo:hover {
+    transform: scale(1.02);
+  }
+
   .logo-icon {
-    width: 48px; height: 48px; border-radius: 14px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; font-weight: 900; color: white;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-xl);
+    background: var(--gradient-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-black);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-glow);
   }
-  .logo-text { display: flex; flex-direction: column; gap: 0.125rem; }
-  .logo-title { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
-  .logo-subtitle { font-size: 0.75rem; color: var(--text-muted); }
-  .header-nav { display: flex; align-items: center; gap: 0.5rem; }
-  .nav-link { padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; border-radius: 8px; transition: all 0.2s ease; }
-  .nav-link:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
-  .header-actions { display: flex; align-items: center; gap: 0.75rem; }
-  .header-search { position: relative; display: flex; align-items: center; }
-  .header-search input {
-    width: 200px; padding: 0.625rem 1rem 0.625rem 2.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px; color: var(--text-primary);
-    font-size: 0.875rem; font-family: inherit;
-    transition: all 0.3s ease;
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-0-5);
   }
-  .header-search input::placeholder { color: var(--text-muted); }
-  .header-search input:focus {
-    outline: none; width: 260px;
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+
+  .logo-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
   }
-  .header-search svg { position: absolute; left: 0.75rem; color: var(--text-muted); pointer-events: none; }
-  .theme-btn {
-    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px; color: var(--text-secondary);
-    cursor: pointer; transition: all 0.3s ease;
+
+  .logo-subtitle {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
   }
-  .theme-btn:hover { background: rgba(255, 255, 255, 0.08); color: var(--text-primary); transform: rotate(180deg); }
-  .icon-moon { display: none; }
-  html.light .icon-sun { display: none; }
-  html.light .icon-moon { display: block; }
-  .menu-btn { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-secondary); cursor: pointer; }
-  @media (max-width: 1024px) { .header-nav { display: none; } .header-search input { width: 160px; } .header-search input:focus { width: 200px; } }
-  @media (max-width: 768px) { .header-search { display: none; } .menu-btn { display: flex; } .logo-text { display: none; } }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .nav-link {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .header-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .header-search :global(.input) {
+    width: 200px;
+    padding: var(--space-2-5) var(--space-3) var(--space-2-5) var(--space-10);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .header-search :global(.input)::placeholder {
+    color: var(--text-muted);
+  }
+
+  .header-search :global(.input):focus {
+    outline: none;
+    width: 260px;
+    background: var(--bg-secondary);
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  .header-search svg {
+    position: absolute;
+    right: var(--space-3);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .menu-btn {
+    display: none;
+  }
+
+  @media (max-width: 1024px) {
+    .header-nav {
+      display: none;
+    }
+
+    .header-search :global(.input) {
+      width: 160px;
+    }
+
+    .header-search :global(.input):focus {
+      width: 200px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header-search {
+      display: none;
+    }
+
+    .menu-btn {
+      display: flex;
+    }
+
+    .logo-text {
+      display: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      font-size: var(--text-lg);
+    }
+  }
+
+  /* Mobile Menu */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .mobile-menu:not(.hidden) {
+    display: block;
+  }
+
+  .mobile-menu-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 320px;
+    padding: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    animation: slideInRight 0.3s var(--ease-out);
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .mobile-nav-link {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .mobile-nav-link:hover {
+    background: var(--bg-tertiary);
+  }
+
+  .mobile-search {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-primary);
+  }
 </style>
 
 <script>
+  // Mobile menu toggle
   (function() {
-    const btn = document.getElementById('theme-toggle');
-    if (!btn) return;
-    const root = document.documentElement;
-    const saved = localStorage.getItem('site-theme') || 'dark';
-    function apply(theme) { root.classList.remove('dark', 'light'); root.classList.add(theme); localStorage.setItem('site-theme', theme); }
-    apply(saved);
-    btn.addEventListener('click', () => { const next = root.classList.contains('dark') ? 'light' : 'dark'; apply(next); });
+    const toggleBtn = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!toggleBtn || !mobileMenu) return;
+
+    function openMenu() {
+      mobileMenu.classList.remove('hidden');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+
+      // Focus first link
+      const firstLink = mobileMenu.querySelector('.mobile-nav-link');
+      firstLink?.focus();
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.add('hidden');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      toggleBtn.focus();
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('hidden')) {
+        openMenu();
+      } else {
+        closeMenu();
+      }
+    });
+
+    // Close on backdrop click
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) {
+        closeMenu();
+      }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        closeMenu();
+      }
+    });
+
+    // Close on link click
+    mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
   })();
-  (function() { const btn = document.getElementById('menu-toggle'); if (!btn) return; btn.addEventListener('click', () => alert('منو موبایل — به زودی')); })();
 </script>

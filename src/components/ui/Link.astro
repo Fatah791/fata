@@ -1,0 +1,63 @@
+---
+/**
+ * Link Component - لینک‌های مدرن با استایل‌دهی پیشرفته
+ */
+interface Props {
+  href: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+  rel?: string;
+  underline?: boolean;
+  external?: boolean;
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  href,
+  target = '_self',
+  rel,
+  underline = false,
+  external = false,
+  class: className = '',
+  'data-testid': testId,
+  ...attrs
+} = Astro.props;
+
+const isExternal = external || (target === '_blank');
+const linkRel = rel || (isExternal ? 'noopener noreferrer' : undefined);
+
+const classes = [
+  'link',
+  underline && 'link-underline',
+  className,
+].filter(Boolean).join(' ');
+---
+
+<a
+  {...attrs}
+  href={href}
+  target={target}
+  rel={linkRel}
+  class={classes}
+  data-testid={testId}
+>
+  <slot />
+  {isExternal && (
+    <svg
+      class="inline-block w-3 h-3 ml-1 align-middle"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  )}
+</a>
+
+<style>
+  /* Link styles are in global styles.css */
+</style>

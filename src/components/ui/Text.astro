@@ -1,0 +1,118 @@
+---
+/**
+ * Text Component - تایپوگرافی یکپارچه و سمانتیک
+ */
+type ElementType = 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'small' | 'mark' | 'time';
+
+interface Props {
+  as?: ElementType;
+  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  color?: 'primary' | 'secondary' | 'tertiary' | 'muted' | 'brand' | 'success' | 'warning' | 'error' | 'inverse';
+  align?: 'left' | 'center' | 'right' | 'justify';
+  transform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
+  decoration?: 'none' | 'underline' | 'line-through';
+  italic?: boolean;
+  truncate?: boolean;
+  balance?: boolean;
+  pretty?: boolean;
+  gradient?: boolean;
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  as: Tag = 'p',
+  size = 'base',
+  weight = 'normal',
+  color = 'primary',
+  align,
+  transform,
+  decoration,
+  italic = false,
+  truncate = false,
+  balance = false,
+  pretty = false,
+  gradient = false,
+  class: className = '',
+  'data-testid': testId,
+  ...attrs
+} = Astro.props;
+
+const sizeClasses = {
+  xs: 'text-xs',
+  sm: 'text-sm',
+  base: 'text-base',
+  lg: 'text-lg',
+  xl: 'text-xl',
+  '2xl': 'text-2xl',
+  '3xl': 'text-3xl',
+  '4xl': 'text-4xl',
+  '5xl': 'text-5xl',
+  '6xl': 'text-6xl',
+};
+
+const weightClasses = {
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
+  bold: 'font-bold',
+  extrabold: 'font-extrabold',
+  black: 'font-black',
+};
+
+const colorClasses = {
+  primary: 'text-text-primary',
+  secondary: 'text-text-secondary',
+  tertiary: 'text-text-tertiary',
+  muted: 'text-text-muted',
+  brand: 'text-text-brand',
+  success: 'text-status-success',
+  warning: 'text-status-warning',
+  error: 'text-status-error',
+  inverse: 'text-text-inverse',
+};
+
+const alignClasses = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+  justify: 'text-justify',
+};
+
+const transformClasses = {
+  none: 'normal-case',
+  uppercase: 'uppercase',
+  lowercase: 'lowercase',
+  capitalize: 'capitalize',
+};
+
+const decorationClasses = {
+  none: 'no-underline',
+  underline: 'underline',
+  'line-through': 'line-through',
+};
+
+const classes = [
+  sizeClasses[size],
+  weightClasses[weight],
+  colorClasses[color],
+  align && alignClasses[align],
+  transform && transformClasses[transform],
+  decoration && decorationClasses[decoration],
+  italic && 'italic',
+  truncate && 'truncate',
+  balance && 'text-balance',
+  pretty && 'text-pretty',
+  gradient && 'text-gradient',
+  className,
+].filter(Boolean).join(' ');
+---
+
+<{Tag} {...attrs} class={classes} data-testid={testId}>
+  <slot />
+</{Tag}>
+
+<style>
+  /* Text utilities are in global styles.css */
+</style>

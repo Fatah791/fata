@@ -1,0 +1,57 @@
+---
+/**
+ * Badge Component - نشانک‌های مدرن و رنگی
+ * انواع: default, brand, success, warning, error, outline
+ */
+interface Props {
+  variant?: 'default' | 'brand' | 'success' | 'warning' | 'error' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  dot?: boolean;
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  variant = 'default',
+  size = 'md',
+  dot = false,
+  class: className = '',
+  'data-testid': testId,
+  ...attrs
+} = Astro.props;
+
+const variantClasses = {
+  default: 'badge badge-default',
+  brand: 'badge badge-brand',
+  success: 'badge badge-success',
+  warning: 'badge badge-warning',
+  error: 'badge badge-error',
+  outline: 'badge badge-outline',
+};
+
+const sizeClasses = {
+  sm: 'px-2 py-0.5 text-[10px]',
+  md: 'px-3 py-1 text-xs',
+  lg: 'px-4 py-1.5 text-sm',
+};
+
+const classes = [
+  variantClasses[variant],
+  sizeClasses[size],
+  className,
+].filter(Boolean).join(' ');
+---
+
+<span {...attrs} class={classes} data-testid={testId}>
+  {dot && (
+    <span
+      class="w-1.5 h-1.5 rounded-full bg-current animate-pulse"
+      aria-hidden="true"
+    />
+  )}
+  <slot />
+</span>
+
+<style>
+  /* Badge styles are in global styles.css */
+</style>

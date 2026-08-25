@@ -1,0 +1,40 @@
+---
+/**
+ * Container Component - کانتینر واکنش‌گرا با حداکثر عرض
+ */
+interface Props {
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  size = '2xl',
+  class: className = '',
+  'data-testid': testId,
+  ...attrs
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'max-w-3xl',
+  md: 'max-w-5xl',
+  lg: 'max-w-6xl',
+  xl: 'max-w-7xl',
+  '2xl': 'max-w-[1400px]',
+  full: 'max-w-full',
+};
+
+const classes = [
+  'container',
+  sizeClasses[size],
+  className,
+].filter(Boolean).join(' ');
+---
+
+<div {...attrs} class={classes} data-testid={testId}>
+  <slot />
+</div>
+
+<style>
+  /* Container styles are in global styles.css */
+</style>

@@ -1,0 +1,104 @@
+---
+/**
+ * Button Component - طراحی مدرن، داینامیک و Accessible
+ * انواع: primary, secondary, ghost, outline, destructive, brand
+ * سایزها: xs, sm, md, lg, xl
+ */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'destructive' | 'brand';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  href?: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+  disabled?: boolean;
+  loading?: boolean;
+  fullWidth?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  'data-testid'?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  target = '_self',
+  disabled = false,
+  loading = false,
+  fullWidth = false,
+  type = 'button',
+  class: className = '',
+  'data-testid': testId,
+  ...attrs
+} = Astro.props;
+
+const isLink = !!href;
+const Tag = isLink ? 'a' : 'button';
+
+const variantClasses = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  ghost: 'btn-ghost',
+  outline: 'btn-outline',
+  destructive: 'btn-destructive',
+  brand: 'btn-brand',
+};
+
+const sizeClasses = {
+  xs: 'btn-xs',
+  sm: 'btn-sm',
+  md: 'btn-md',
+  lg: 'btn-lg',
+  xl: 'btn-xl',
+};
+
+const classes = [
+  'btn',
+  variantClasses[variant],
+  sizeClasses[size],
+  fullWidth ? 'w-full' : '',
+  className,
+].filter(Boolean).join(' ');
+---
+
+<{Tag}
+  {...attrs}
+  href={isLink ? href : undefined}
+  target={isLink ? target : undefined}
+  type={isLink ? undefined : type}
+  disabled={disabled || loading}
+  aria-disabled={disabled || loading}
+  aria-busy={loading}
+  class={classes}
+  data-testid={testId}
+>
+  {loading && (
+    <svg
+      class="animate-spin h-5 w-5"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      />
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  )}
+  <span class={loading ? 'opacity-0' : ''}>
+    <slot />
+  </span>
+</{Tag}>
+
+<style>
+  /* Button styles are in global styles.css */
+</style>

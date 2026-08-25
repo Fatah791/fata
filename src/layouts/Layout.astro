@@ -1,54 +1,54 @@
 ---
 import '../styles.css'
 import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
 
 export interface Props {
-	title: string;
-	description?: string;
-	image?: string;
+  title: string;
+  description?: string;
+  image?: string;
 }
 
-const { title, description = 'سایت بهترین‌ها - معرفی بهترین کسب‌وکارهای شهر شما', image } = Astro.props;
+const { title, description = 'سایت بهترینها - معرفی بهترین کسبوکارهای شهر شما', image } = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" class="dark">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description}>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		
-		<!-- Open Graph / Social Media -->
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
-		<meta property="og:locale" content="fa_IR" />
-		{image && <meta property="og:image" content={image} />}
-		
-		<!-- Twitter Card -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		
-		<title>{title}</title>
-	</head>
-	<body class="min-h-screen">
-		<a class="skip-link sr-only" href="#content">Skip to content</a>
-		<Header />
-		<main id="content" class="container py-10">
-			<slot />
-		</main>
-		<footer>
-			<slot name="footer" />
-		</footer>
-		<script>
-		  // small helper: add focus-visible support for skip link
-		  (function(){
-		    const s = document.querySelector('.skip-link');
-		    if(!s) return; s.addEventListener('keydown', e=>{});
-		  })();
-		</script>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description}>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fa_IR" />
+    {image && <meta property="og:image" content={image} />}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a class="skip-link" href="#content">به محتوای اصلی بروید</a>
+    <Header />
+    <main id="content" class="flex-1 container py-10">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // Focus visible support for skip link
+      (function() {
+        const skipLink = document.querySelector('.skip-link');
+        if (!skipLink) return;
+        skipLink.addEventListener('keydown', () => {});
+      })();
+    </script>
+  </body>
 </html>
