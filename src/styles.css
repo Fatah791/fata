@@ -135,36 +135,27 @@
    ────────────────────────────────────────── */
 html.light,
 [data-theme="light"] {
-  --bg-primary: #f8f8fc;
-  --bg-secondary: #ffffff;
-
-  /* Soft daylight wash so the fixed backdrop stays pleasant in light mode */
-  --gradient-mesh:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 58, 237, 0.07), transparent),
-    radial-gradient(ellipse 60% 45% at 85% 5%, rgba(59, 130, 246, 0.05), transparent),
-    radial-gradient(ellipse 55% 40% at 12% 12%, rgba(192, 132, 252, 0.04), transparent);
+  --bg-primary: #272740;
+  --bg-secondary: #3e2556;
+  --gradient-mesh: radial-gradient(ellipse 80% 50% at 50% -10%, #7c3aed12, transparent), radial-gradient(ellipse 60% 45% at 85% 5%, #3b82f60d, transparent), radial-gradient(ellipse 55% 40% at 12% 12%, #c084fc0a, transparent);
   --bg-tertiary: #f0f0f5;
-  --bg-glass: rgba(248, 248, 252, 0.75);
-  --bg-glass-strong: rgba(255, 255, 255, 0.9);
-
+  --bg-glass: #f8f8fcbf;
+  --bg-glass-strong: #ffffffe6;
   --text-primary: #17171f;
   --text-secondary: #52525e;
   --text-tertiary: #6a6a7a;
   --text-muted: #8a8a9a;
-  --text-inverse: #ffffff;
+  --text-inverse: #fff;
   --text-brand: #6d28d9;
   --text-accent: #0e7490;
-
-  --border-primary: rgba(10, 10, 15, 0.08);
-  --border-secondary: rgba(10, 10, 15, 0.14);
-  --border-accent: rgba(139, 92, 246, 0.4);
-  --border-accent-hover: rgba(139, 92, 246, 0.6);
+  --border-primary: #0a0a0f14;
+  --border-secondary: #0a0a0f24;
+  --border-accent: #8b5cf666;
+  --border-accent-hover: #8b5cf699;
   --border-focus: #8b5cf6;
-
   --interactive-primary: #7c3aed;
   --interactive-ghost: transparent;
-  --interactive-ghost-hover: rgba(0, 0, 0, 0.03);
-
+  --interactive-ghost-hover: #00000008;
   --shadow-glow: none;
   --shadow-glow-strong: none;
   --shadow-card: none;
