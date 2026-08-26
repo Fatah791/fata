@@ -53,7 +53,7 @@ const sorted = filtered.sort(
                 <img src={post.data.image} alt={post.data.title} loading="lazy" />
               )}
               <div class="article-card-body">
-                <h3>{post.data.title}</h3>
+                <h2>{post.data.title}</h2>
                 {post.data.date && (
                   <time datetime={post.data.date.toISOString()}>
                     {post.data.date.toLocaleDateString('fa-IR')}
@@ -124,7 +124,7 @@ const sorted = filtered.sort(
   }
   .article-card img { width: 100%; aspect-ratio: 5 / 3; object-fit: cover; }
   .article-card-body { padding: var(--space-5); }
-  .article-card h3 { margin: 0 0 var(--space-2); color: var(--text-primary); }
+  .article-card h2 { margin: 0 0 var(--space-2); color: var(--text-primary); }
   .article-card time { font-size: var(--text-sm); color: var(--text-muted); }
   .empty-state { color: var(--text-muted); }
 </style>

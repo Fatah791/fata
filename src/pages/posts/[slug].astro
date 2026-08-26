@@ -28,7 +28,7 @@ export async function getStaticPaths() {
         {post.data.image && <img src={post.data.image} alt={post.data.title} class="rounded-lg w-full h-auto" />}
       </header>
 
-      <article class="article-content">
+      <article class="article-content prose">
         <Content />
       </article>
 

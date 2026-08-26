@@ -260,6 +260,17 @@ import { Search, ThemeToggle } from './ui';
     animation: slideInRight 0.3s var(--ease-out);
   }
 
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
   .mobile-nav {
     display: flex;
     flex-direction: column;
