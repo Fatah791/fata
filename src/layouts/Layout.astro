@@ -7,9 +7,11 @@ export interface Props {
   title: string;
   description?: string;
   image?: string;
+  /** Full-bleed layout (no container/padding) for the redesigned home page */
+  wide?: boolean;
 }
 
-const { title, description = 'سایت بهترینها - معرفی بهترین کسبوکارهای شهر شما', image } = Astro.props;
+const { title, description = 'سایت بهترینها - معرفی بهترین کسبوکارهای شهر شما', image, wide = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -55,9 +57,15 @@ const { title, description = 'سایت بهترینها - معرفی بهتری�
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
+    <style>
+      .main-wide {
+        width: 100%;
+        padding: 0;
+      }
+    </style>
     <a class="skip-link" href="#content">به محتوای اصلی بروید</a>
     <Header />
-    <main id="content" class="flex-1 container py-10">
+    <main id="content" class:list={['flex-1', wide ? 'main-wide' : 'container py-10']}>
       <slot />
     </main>
     <Footer />

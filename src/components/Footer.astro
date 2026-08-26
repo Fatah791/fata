@@ -1,35 +1,50 @@
 ---
 import { Link } from './ui';
+
+const year = '۱۴۰۵';
 ---
 
 <footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="footer-logo">
-          <div class="logo-icon"><span>ب</span></div>
+        <a href="/" class="footer-logo" aria-label="بهترینها — صفحه اصلی">
+          <svg class="logo-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 1.5c.55 5.85 4.1 9.4 10.5 10.5-6.4 1.1-9.95 4.65-10.5 10.5C11.45 16.65 7.9 13.1 1.5 12 7.9 10.9 11.45 7.35 12 1.5Z" />
+          </svg>
           <span class="logo-text">بهترینها</span>
         </a>
-        <p class="footer-desc">مرجع معرفی برترین کسبوکارها و مقالات آموزشی.</p>
+        <p class="footer-desc">مرجع معرفی برترین کسبوکارهای شهر شما — با آمار واقعی و امتیاز کاربران.</p>
       </div>
 
-      <div class="footer-section">
-        <h4 class="footer-title">دسترسی سریع</h4>
+      <nav class="footer-section" aria-label="محصول">
+        <h4 class="footer-title">محصول</h4>
         <ul class="footer-links">
-          <li><Link href="/">صفحه اصلی</Link></li>
+          <li><Link href="/">خانه</Link></li>
           <li><Link href="/posts">مقالات</Link></li>
-          <li><Link href="/posts?q=کارواش">کارواش</Link></li>
+          <li><Link href="/posts?q=کارواش">جستجوی کسبوکار</Link></li>
         </ul>
-      </div>
+      </nav>
 
-      <div class="footer-section">
-        <h4 class="footer-title">دستهبندیها</h4>
+      <nav class="footer-section" aria-label="دستهبندیها">
+        <h4 class="footer-title">دستهها</h4>
         <ul class="footer-links">
+          <li><Link href="/posts?q=کارواش">کارواش</Link></li>
           <li><Link href="/posts?q=رستوران">رستوران</Link></li>
           <li><Link href="/posts?q=کافیشاپ">کافیشاپ</Link></li>
-          <li><Link href="/posts?q=هتل">هتل</Link></li>
+          <li><Link href="/posts?q=آرایشگاه">آرایشگاه</Link></li>
         </ul>
-      </div>
+      </nav>
+
+      <nav class="footer-section" aria-label="شهرها">
+        <h4 class="footer-title">شهرها</h4>
+        <ul class="footer-links">
+          <li><Link href="/posts?q=تهران">تهران</Link></li>
+          <li><Link href="/posts?q=اصفهان">اصفهان</Link></li>
+          <li><Link href="/posts?q=مشهد">مشهد</Link></li>
+          <li><Link href="/posts?q=شیراز">شیراز</Link></li>
+        </ul>
+      </nav>
 
       <div class="footer-section">
         <h4 class="footer-title">تماس</h4>
@@ -41,7 +56,11 @@ import { Link } from './ui';
     </div>
 
     <div class="footer-bottom">
-      <p>© ۱۴۰۳ بهترینها — تمامی حقوق محفوظ است.</p>
+      <p>© {year} بهترینها — تمامی حقوق محفوظ است.</p>
+      <ul class="footer-legal">
+        <li><Link href="/">حریم خصوصی</Link></li>
+        <li><Link href="/">شرایط استفاده</Link></li>
+      </ul>
     </div>
   </div>
 </footer>
@@ -57,20 +76,29 @@ import { Link } from './ui';
 
   .footer-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: var(--space-12);
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+    gap: var(--space-10);
     margin-bottom: var(--space-12);
   }
 
   @media (max-width: 1024px) {
     .footer-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
     }
   }
 
   @media (max-width: 640px) {
     .footer-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 
@@ -86,17 +114,10 @@ import { Link } from './ui';
     margin-bottom: var(--space-5);
   }
 
-  .footer-logo .logo-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-md);
-    background: var(--interactive-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-bold);
-    color: #ffffff;
+  .footer-logo .logo-mark {
+    width: 20px;
+    height: 20px;
+    color: var(--color-brand-400);
   }
 
   .footer-logo .logo-text {
@@ -166,7 +187,9 @@ import { Link } from './ui';
   .footer-bottom {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
     padding-top: var(--space-8);
     border-top: 1px solid var(--border-primary);
   }
@@ -175,5 +198,24 @@ import { Link } from './ui';
     margin: 0;
     font-size: var(--text-sm);
     color: var(--text-muted);
+  }
+
+  .footer-legal {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: var(--space-5);
+  }
+
+  .footer-legal a {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .footer-legal a:hover {
+    color: var(--text-brand);
   }
 </style>

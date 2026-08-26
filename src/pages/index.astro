@@ -2,533 +2,872 @@
 import Layout from '../layouts/Layout.astro';
 
 export const prerender = true;
+const ic = {
+  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 2.6 4 5.6 4 9s-1.2 6.4-4 9c-2.8-2.6-4-5.6-4-9s1.2-6.4 4-9Z"/></svg>',
+  db: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5V12c0 1.7 3.6 3 8 3s8-1.3 8-3V5.5M4 12v6.5c0 1.7 3.6 3 8 3s8-1.3 8-3V12"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 10a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20v-8M11 20V5M17 20v-5"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5c0 4.6 3.2 8 7.5 10 4.3-2 7.5-5.4 7.5-10V6L12 3Z"/><path d="m9 11.5 2 2 4-4"/></svg>',
+  key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="15" r="4.5"/><path d="m11.5 11.5 8-8M17 4l3 3M14 7l2.5 2.5"/></svg>',
+};
 
-const categories = [
-  { name: 'کافیشاپ', slug: 'کافیشاپ', icon: '☕', count: '۳۴' },
-  { name: 'رستوران', slug: 'رستوران', icon: '🍽️', count: '۵۲' },
-  { name: 'کارواش', slug: 'کارواش', icon: '🚗', count: '۲۸' },
-  { name: 'آرایشگاه', slug: 'آرایشگاه', icon: '💇', count: '۴۱' },
-  { name: 'باشگاه', slug: 'باشگاه', icon: '🏋️', count: '۱۹' },
-  { name: 'هتل', slug: 'هتل', icon: '🏨', count: '۱۲' },
+const features = [
+  { size: 'lg', icon: ic.globe, title: 'شبکه توزیع کشوری', desc: 'صفحه کسبوکار شما از نزدیکترین لبهٔ شبکه به بازدیدکننده میرسد؛ سریع در تهران، سریع در هر شهری.', viz: 'map' },
+  { size: '', icon: ic.db, title: 'دادههای لحظهای', desc: 'امتیازها و آمار هر کسبوکار بیدرنگ بهروز میشود.', viz: 'table' },
+  { size: '', icon: ic.link, title: 'نشانیهای خوانا', desc: 'هر کسبوکار یک نشانی تمیز و اشتراکگذاریپذیر میگیرد.', viz: 'urls' },
+  { size: 'lg', icon: ic.chart, title: 'تحلیل بازدید', desc: 'روند بازدید صفحه، منابع ورودی و تعامل کاربران را ببینید و بر اساس داده تصمیم بگیرید.', viz: 'chart' },
+  { size: 'half', icon: ic.shield, title: 'اعتبارسنجی دستی', desc: 'هر ثبتنامی پیش از انتشار بررسی میشود؛ بدون صف و تبلیغ پنهان.', viz: '' },
+  { size: 'half', icon: ic.key, title: 'دسترسی آسان', desc: 'ثبت کسبوکار در کمتر از دو دقیقه، بدون نیاز به دانش فنی.', viz: '' },
 ];
 
-const cities = ['تهران', 'اصفهان', 'مشهد', 'شیراز', 'تبریز', 'کرج', 'یزد', 'رشت'];
+const checks = [
+  'جستجوی فوری بین صدها کسبوکار',
+  'فیلتر بر اساس شهر، دستهبندی و امتیاز',
+  'صفحات سریع و موبایلپسند برای همه',
+  'بهروزرسانی مداوم اطلاعات کسبوکارها',
+  'بدون تبلیغ اجباری، بدون رتبه خریداری',
+];
 
-const stats = [
-  { value: '+۲۵۰', label: 'کسبوکار ثبتشده' },
-  { value: '۸', label: 'شهر تحت پوشش' },
-  { value: '+۱۲۰', label: 'مقاله آموزشی' },
-  { value: '۴٫۸', label: 'میانگین رضایت' },
+const traces = [
+  { svc: 'gateway', op: 'GET /api/search', dur: '4ms', o: 14, m: 0, c: '#38bdf8' },
+  { svc: 'auth', op: 'verify session', dur: '2ms', o: 9, m: 10, c: '#818cf8' },
+  { svc: 'catalog', op: 'query businesses', dur: '11ms', o: 30, m: 21, c: '#a78bfa' },
+  { svc: 'rank', op: 'score + sort', dur: '31ms', o: 52, m: 33, c: '#34d399' },
+  { svc: 'edge', op: 'render html', dur: '6ms', o: 18, m: 42, c: '#f472b6' },
+];
+
+const logs = [
+  { time: '14:02:11', level: 'info', msg: 'request received', meta: 'GET /api/search' },
+  { time: '14:02:11', level: 'info', msg: 'session verified', meta: 'user_8x2 · oauth' },
+  { time: '14:02:11', level: 'info', msg: 'cache miss → catalog', meta: 'region thr-1' },
+  { time: '14:02:12', level: 'warn', msg: 'slow query detected', meta: '182ms · idx_fix' },
+  { time: '14:02:12', level: 'ok', msg: '12 businesses ranked', meta: 'score p95' },
+  { time: '14:02:12', level: 'info', msg: 'response streamed', meta: '200 · 54ms total' },
+  { time: '14:02:13', level: 'ok', msg: 'page cached at edge', meta: 'ttl 60s' },
 ];
 
 const testimonials = [
-  {
-    quote: 'با معرف شدن در بهترینها، مشتریهای جدید ما در ماه اول دو برابر شد. ساده و مؤثر.',
-    name: 'امیر کریمی',
-    role: 'مدیر کارواش رویال، تهران',
-    initial: 'ا',
-  },
-  {
-    quote: 'دقیقترین راهنمای محلی که تا حالا استفاده کردیم. آمار صفحهمان را شفاف نشان میدهند.',
-    name: 'سارا محمدی',
-    role: 'بنیانگذار کافه لمیز، اصفهان',
-    initial: 'س',
-  },
-  {
-    quote: 'مقالات راهنمای رشدشان دقیقاً همان چیزی بود که برای شروع لازم داشتم.',
-    name: 'رضا احمدی',
-    role: 'مالی هتل پارس، شیراز',
-    initial: 'ر',
-  },
-];
-
-const recentArticles = [
-  { title: 'چگونه مقالهای مؤثر بنویسیم؟', slug: 'sample-article', excerpt: 'راهنمای عملی برای نوشتن مقالات واضح، خوانا و حرفهای.', city: 'تهران', category: 'مقالات' },
-  { title: 'بهترین کارواشهای اصفهان', slug: 'بهترین-کارواش-اصفهان', excerpt: 'لیست کاملی از بهترین کارواشهای اصفهان...', city: 'اصفهان', category: 'کارواش' },
-  { title: 'ارزانترین رستورانهای تهران', slug: 'ارزان-رستوران-تهران', excerpt: 'معرفی رستورانهای اقتصادی تهران...', city: 'تهران', category: 'رستوران' },
+  { quote: 'با معرفی شدن در بهترینها، مشتریهای جدید ما در ماه اول دو برابر شد. ساده و مؤثر.', name: 'امیر کریمی', role: 'مدیر کارواش رویال، تهران', initial: 'ا', hue: 'a' },
+  { quote: 'دقیقترین راهنمای محلی که تا حالا استفاده کردیم. آمار صفحهمان را شفاف نشان میدهند.', name: 'سارا محمدی', role: 'بنیانگذار کافه لمیز، اصفهان', initial: 'س', hue: 'b' },
+  { quote: 'مقالات راهنمای رشدشان دقیقاً همان چیزی بود که برای شروع لازم داشتم.', name: 'رضا احمدی', role: 'مالک هتل پارس، شیراز', initial: 'ر', hue: 'c' },
 ];
 ---
 
-<Layout title="بهترینها | معرفی بهترین کسبوکارهای شهر شما" description="مرجع کامل معرفی بهترین کسبوکارهای ایران.">
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <span class="hero-badge">بهترینها ۲٫۰ — حالا در ۸ شهر ایران <span aria-hidden="true">←</span></span>
-          <h1 class="hero-title">بهترین کسبوکارهای شهرتان،<br /><span class="hero-title-accent">در چند ثانیه</span></h1>
-          <p class="hero-sub">
-            بهترینها کسبوکارهای برتر ایران را با آمار واقعی، امتیاز کاربران و راهنمای کامل معرفی میکند — سریع، دقیق و بدون تعارف.
-          </p>
-          <div class="hero-actions">
-            <a href="/posts" class="btn btn-primary btn-lg">شروع جستجو</a>
-            <a href="/posts/sample-article" class="btn btn-outline btn-lg">مشاهده نمونه بررسی</a>
-          </div>
-          <p class="hero-trust-note">بدون نیاز به ثبتنام · رایگان برای همیشه</p>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="terminal">
-            <div class="terminal-bar">
-              <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
-              <span class="terminal-title" dir="ltr">behtarinha — search</span>
-            </div>
-            <pre class="terminal-body" dir="ltr"><code><span class="t-prompt">$</span> behtarinha search <span class="t-str">"کارواش"</span> <span class="t-flag">--city</span> تهران
-
-<span class="t-ok">✓</span> 12 results found <span class="t-dim">(0.04s)</span>
-
-1. carwash royal    <span class="t-star">★ 4.9</span>   Tehran
-2. carwash pars     <span class="t-star">★ 4.7</span>   Karaj
-3. wash express     <span class="t-star">★ 4.5</span>   Isfahan<span class="t-cursor"></span></code></pre>
-            <div class="terminal-stats">
-              <span dir="ltr">0.04s avg</span><i></i><span>۸ شهر</span><i></i><span>+۲۵۰ کسبوکار</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Trust Bar -->
-  <section class="trustbar">
-    <div class="container">
-      <p class="trust-label">مورد اعتماد کسبوکارهای برتر در سراسر ایران</p>
-      <ul class="trust-cities" aria-label="شهرهای تحت پوشش">
-        {cities.map(c => (<li>{c}</li>))}
-      </ul>
-    </div>
-  </section>
-  <!-- Categories / Features Grid -->
-  <section class="cats">
-    <div class="container">
-      <div class="section-head">
-        <h2 class="section-title">دستهبندیها را کاوش کنید</h2>
-        <p class="section-sub">هر کسبوکار با امتیاز واقعی کاربران، موقعیت و جزئیات کامل معرفی میشود.</p>
-      </div>
-      <div class="cats-grid">
-        {categories.map(c => (
-          <a href={`/posts?q=${encodeURIComponent(c.name)}`} class="cat-card">
-            <span class="cat-icon" aria-hidden="true">{c.icon}</span>
-            <span class="cat-name">{c.name}</span>
-            <span class="cat-count">{c.count} کسبوکار</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <section class="stats">
-    <div class="container">
-      <div class="stats-grid">
-        {stats.map(s => (
-          <div class="stat-cell">
-            <span class="stat-value">{s.value}</span>
-            <span class="stat-label">{s.label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Articles -->
-  <section class="articles">
-    <div class="container">
-      <div class="section-head row">
-        <div>
-          <h2 class="section-title">مقالات جدید</h2>
-          <p class="section-sub">راهنماها و بررسیهای تخصصی برای انتخاب بهتر.</p>
-        </div>
-        <a href="/posts" class="view-all">مشاهده همه ←</a>
-      </div>
-      <div class="articles-grid">
-        {recentArticles.map(article => (
-          <a href={`/posts/${article.slug}`} class="article-card">
-            <span class="article-cat">{article.category}</span>
-            <h3 class="article-title">{article.title}</h3>
-            <p class="article-excerpt">{article.excerpt}</p>
-            <span class="article-meta">{article.city} · {article.category}</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <div class="container">
-      <div class="section-head">
-        <h2 class="section-title">کسبوکارها چه میگویند</h2>
-        <p class="section-sub">نظر صاحبان کسبوکارهایی که در بهترینها معرفی شدهاند.</p>
-      </div>
-      <div class="testi-grid">
-        {testimonials.map(t => (
-          <figure class="testi-card">
-            <blockquote>{t.quote}</blockquote>
-            <figcaption>
-              <span class="testi-avatar" aria-hidden="true">{t.initial}</span>
-              <span class="testi-who">
-                <strong>{t.name}</strong>
-                <small>{t.role}</small>
-              </span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
-  <section class="cta">
-    <div class="container">
-      <div class="cta-banner">
-        <h2 class="cta-title">کسبوکارتان را به بهترینها بیاورید</h2>
-        <p class="cta-sub">رایگان معرفی شوید و مشتریهای جدید را از همین هفته جذب کنید.</p>
-        <div class="cta-actions">
+<Layout title="بهترینها | معرفی بهترین کسبوکارهای شهر شما" description="مرجع کامل معرفی بهترین کسبوکارهای ایران." wide>
+  <div class="home">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <a href="/posts/sample-article" class="hero-announce">
+          <span class="ha-text">بهترینها ۲٫۰ منتشر شد</span>
+          <span class="ha-arrow" aria-hidden="true">←</span>
+        </a>
+        <h1 class="hero-title">
+          بهترین کسبوکارهای شهر شما،
+          <br />
+          <span class="hero-gradient">در چند ثانیه پیدا کنید</span>
+        </h1>
+        <p class="hero-sub">
+          بهترینها کسبوکارهای برتر ایران را با آمار واقعی و امتیاز کاربران معرفی میکند — سریع، دقیق و بدون تعارف.
+        </p>
+        <div class="hero-actions">
           <a href="/posts" class="btn btn-primary btn-lg">شروع کنید</a>
-          <a href="/posts/sample-article" class="btn btn-outline btn-lg">یک نمونه ببینید</a>
+          <a href="/posts?q=کارواش" class="btn btn-outline btn-lg">مشاهده دمو ←</a>
+        </div>
+        <p class="hero-npm" dir="ltr">$ npm create behtarinha@latest</p>
+        <div class="hero-window" dir="ltr">
+          <div class="win-bar">
+            <span class="win-dot"></span><span class="win-dot"></span><span class="win-dot"></span>
+            <span class="win-title">behtarinha — zsh</span>
+          </div>
+          <div class="win-grid">
+            <pre class="win-pane win-code"><code><span class="t-cm">// یک جستجو، کل شهر</span>
+<span class="t-kw">import</span> &#123; behtarinha &#125; <span class="t-kw">from</span> <span class="t-str">'@behtarinha/core'</span>;
+
+<span class="t-kw">const</span> results = <span class="t-kw">await</span> behtarinha.<span class="t-fn">search</span>(&#123;
+  query: <span class="t-str">'بهترین کافیشاپ'</span>,
+  city: <span class="t-str">'اصفهان'</span>,
+  sort: <span class="t-str">'rating'</span>,
+&#125;);
+
+results.<span class="t-fn">forEach</span>((r) =&gt; r.<span class="t-fn">print</span>());</code></pre>
+            <pre class="win-pane win-term"><code><span class="t-p">$</span> behtarinha search "کافیشاپ"
+
+<span class="t-ok">✓</span> ۱۲ نتیجه در ۰٫۰۴ ثانیه
+
+ ۱٫ لمیز      <span class="t-star">★ ۴٫۹</span>
+ ۲٫ برژان    <span class="t-star">★ ۴٫۸</span>
+ ۳٫ گاندو    <span class="t-star">★ ۴٫۷</span>
+
+<span class="t-dim">↑↓ برای انتخاب · Enter برای مشاهده</span></code></pre>
+          </div>
+          <div class="win-status">
+            <span class="ws-item"><span class="ws-dot"></span> connected</span>
+            <span class="ws-dim">behtarinha v۲٫۰ · edge · 54ms</span>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="platform">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-label" dir="ltr">PLATFORM</span>
+          <h2 class="sec-title">همهچیز برای دیده شدن، یکجا</h2>
+          <p class="sec-sub">زیرساخت کاملی که کسبوکار شما برای رسیدن به مشتری بعدی نیاز دارد.</p>
+        </div>
+        <div class="bento">
+          {features.map((f) => (
+            <article class:list={['bento-card', f.size]}>
+              <div class="bc-icon" set:html={f.icon} />
+              <h3 class="bc-title">{f.title}</h3>
+              <p class="bc-desc">{f.desc}</p>
+              {f.viz === 'map' && (
+                <div class="viz viz-map" aria-hidden="true">
+                  <svg viewBox="0 0 280 150" preserveAspectRatio="xMidYMid slice">
+                    <g fill="none" stroke="rgba(139,92,246,0.28)" stroke-width="1">
+                      <path d="M40 120 C80 90 90 50 140 45 S230 70 255 35" />
+                      <path d="M25 60 C70 55 100 95 150 88 S225 105 262 82" />
+                      <path d="M55 138 C110 118 160 128 215 108" />
+                      <path d="M18 96 C60 84 130 62 250 122" />
+                    </g>
+                    <circle cx="140" cy="45" r="34" fill="url(#pulse)" />
+                    <circle cx="140" cy="45" r="5" fill="#a78bfa" />
+                    {[[68, 92], [212, 58], [58, 74], [228, 112], [104, 116], [186, 94], [36, 44], [248, 66]].map(([cx, cy]) => (
+                      <circle cx={cx} cy={cy} r="3" fill="#22d3ee" opacity="0.85" />
+                    ))}
+                    <defs>
+                      <radialGradient id="pulse">
+                        <stop offset="0%" stop-color="rgba(167,139,250,0.35)" />
+                        <stop offset="100%" stop-color="rgba(167,139,250,0)" />
+                      </radialGradient>
+                    </defs>
+                  </svg>
+                </div>
+              )}
+              {f.viz === 'table' && (
+                <div class="viz viz-table" aria-hidden="true" dir="ltr">
+                  {[['royal-carwash', '۴٫۹', '+۱۲٪'], ['cafe-lamiz', '۴٫۸', '+۸٪'], ['hotel-pars', '۴٫۷', '+۵٪']].map(([id, rating, delta]) => (
+                    <span class="vt-row"><code>{id}</code><b>{rating}</b><i>{delta}</i></span>
+                  ))}
+                </div>
+              )}
+              {f.viz === 'urls' && (
+                <div class="viz viz-urls" aria-hidden="true" dir="ltr">
+                  {['behtarinha.ir/کارواش/رویال', 'behtarinha.ir/کافیشاپ/لمیز'].map((u) => (
+                    <span class="vu-row"><span class="vu-lock">🔒</span><code>{u}</code></span>
+                  ))}
+                </div>
+              )}
+              {f.viz === 'chart' && (
+                <div class="viz viz-chart" aria-hidden="true">
+                  <svg viewBox="0 0 300 110" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(139,92,246,0.32)" />
+                        <stop offset="100%" stop-color="rgba(139,92,246,0)" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M0 86 L38 72 L76 80 L114 56 L152 64 L190 38 L228 46 L266 22 L300 30 V110 H0 Z" fill="url(#chartFill)" />
+                    <path d="M0 86 L38 72 L76 80 L114 56 L152 64 L190 38 L228 46 L266 22 L300 30" fill="none" stroke="#a78bfa" stroke-width="2" />
+                    <circle cx="266" cy="22" r="4" fill="#22d3ee" />
+                  </svg>
+                  <div class="vc-legend">
+                    {[['بازدید صفحه', '#a78bfa'], ['کلیک تماس', '#22d3ee']].map(([label, color]) => (
+                      <span class="vc-item"><i style={`background:${color}`} />{label}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="dx">
+      <div class="dx-rule" aria-hidden="true"></div>
+      <div class="container dx-grid">
+        <div class="dx-copy">
+          <span class="sec-label" dir="ltr">EXPERIENCE</span>
+          <h2 class="sec-title">تجربهای که کاربر برمیگردد</h2>
+          <p class="sec-sub">همهچیز برای یافتن سریع و تصمیم مطمئن فراهم است.</p>
+          <ul class="dx-checks">
+            {checks.map((c) => (
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m5 12.5 4.5 4.5L19 7.5" />
+                </svg>
+                <span>{c}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="editor" aria-hidden="true">
+          <div class="ed-tabs">
+            {['جستجو', 'فیلترها', 'ذخیرهشدهها'].map((t, i) => (
+              <button type="button" class:list={['ed-tab', i === 0 ? 'is-active' : '']}>{t}</button>
+            ))}
+            <div class="ed-dots"><span /><span /><span /></div>
+          </div>
+          <pre class="ed-body" dir="ltr"><code><span class="t-cm">// جستجوی زنده</span>
+<span class="t-kw">const</span> q = behtarinha.<span class="t-fn">query</span>(&#123;
+  city:   <span class="t-str">'تهران'</span>,
+  min:    <span class="t-num">4.5</span>,
+  open:   <span class="t-bool">true</span>,
+&#125;);
+
+q.<span class="t-fn">filter</span>(<span class="t-str">'کارواش'</span>).<span class="t-fn">limit</span>(<span class="t-num">10</span>);
+
+<span class="t-ok">✓</span> <span class="t-num">10</span> matches · <span class="t-num">38ms</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="obs">
+      <div class="obs-rule" aria-hidden="true"></div>
+      <div class="container obs-grid">
+        <div class="obs-copy">
+          <span class="sec-label" dir="ltr">OBSERVABILITY</span>
+          <h2 class="sec-title">شفافیت کامل، اعتماد کامل</h2>
+          <p class="sec-sub">هر امتیاز قابل ردیابی است؛ از اولین بازدید تا آخرین بهروزرسانی.</p>
+          <a href="/posts" class="btn btn-outline btn-sm obs-link">مشاهده روش امتیازدهی ←</a>
+        </div>
+
+        <div class="obs-panel" dir="ltr">
+          <div class="obs-tabs">
+            <span class="obs-tab is-active">Traces</span>
+            <span class="obs-tab">Metrics</span>
+            <span class="obs-tab">Logs</span>
+          </div>
+
+          <div class="trace">
+            {traces.map((tr) => (
+              <div class="tr-row">
+                <span class="tr-svc">{tr.svc}</span>
+                <span class="tr-op">{tr.op}</span>
+                <span class="tr-lane">
+                  <i style={`margin-left:${tr.o}%;width:${tr.m}%;background:${tr.c}`} />
+                </span>
+                <span class="tr-dur">{tr.dur}</span>
+              </div>
+            ))}
+            <div class="tr-axis"><span>0ms</span><span>25ms</span><span>50ms</span></div>
+          </div>
+
+          <div class="logbox">
+            <div class="lb-head"><span class="lb-dot" /> live logs — production</div>
+            {logs.map((l) => (
+              <p class="lb-line">
+                <span class="lb-time">{l.time}</span>
+                <span class:list={['lb-level', `lv-${l.level}`]}>{l.level.toUpperCase()}</span>
+                <span class="lb-msg">{l.msg} <span class="lb-meta">{l.meta}</span></span>
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-label" dir="ltr">TESTIMONIALS</span>
+          <h2 class="sec-title">صاحبان کسبوکار چه میگویند</h2>
+          <p class="sec-sub">بیش از ۲۵۰ کسبوکار در بهترینها ثبت شدهاند.</p>
+        </div>
+        <div class="testi-grid">
+          {testimonials.map((t) => (
+            <figure class="testi-card">
+              <blockquote><p>«{t.quote}»</p></blockquote>
+              <figcaption>
+                <span class:list={['testi-avatar', `ta-${t.hue}`]}>{t.initial}</span>
+                <span class="testi-who"><strong>{t.name}</strong><small>{t.role}</small></span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="container cta-inner">
+        <h2 class="cta-title">
+          کسبوکار شما دیده شدن را
+          <br />
+          <span class="hero-gradient">لیاقتش را دارد</span>
+        </h2>
+        <p class="cta-sub">در چند دقیقه ثبت کنید؛ بینندههای بیشتری جذب کنید.</p>
+        <div class="cta-actions">
+          <a href="/posts" class="btn btn-primary btn-lg">همین حالا شروع کنید</a>
+          <a href="/posts?q=کافیشاپ" class="btn btn-outline btn-lg">مشاهده نمونهها</a>
+        </div>
+        <ul class="cta-points">
+          {[['رایگان', 'بدون هزینه اولیه'], ['سریع', 'راهاندازی زیر ۲ دقیقه'], ['مقیاسپذیر', 'از یک مغازه تا یک زنجیره']].map(([b, s]) => (
+            <li><strong>{b}</strong><span>{s}</span></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <style>
-  /* ── Hero ─────────────────────────────── */
-  .hero { padding: 5rem 0 4rem; }
-  .hero-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
-  @media (min-width: 1024px) {
-    .hero-grid { grid-template-columns: 1.1fr 1fr; gap: 4rem; }
-    .hero { padding: 7rem 0 5rem; }
+  /* ═══ Shared / tokens ═══ */
+  .home {
+    --grad-text: linear-gradient(100deg, #a5b4fc 0%, #c4b5fd 45%, #67e8f9 100%);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow: clip;
   }
 
-  .hero-badge {
+  .sec-head {
+    max-width: 660px;
+    margin: 0 auto var(--space-12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .sec-label {
+    font-family: var(--mono);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.22em;
+    color: var(--text-accent);
+  }
+
+  .sec-title {
+    margin: 0;
+    font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    color: var(--text-primary);
+  }
+
+  .sec-sub {
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  /* Syntax tokens (shared by all code panes) */
+  .t-kw { color: #c4b5fd; }
+  .t-str { color: #7dd3fc; }
+  .t-fn { color: #67e8f9; }
+  .t-cm { color: rgba(160, 160, 180, 0.55); font-style: italic; }
+  .t-num { color: #fda4af; }
+  .t-bool { color: #fca5a5; }
+  .t-ok { color: #34d399; }
+  .t-star { color: #fbbf24; }
+  .t-p { color: #22d3ee; font-weight: 600; }
+  .t-dim { color: rgba(160, 160, 180, 0.6); }
+  /* ═══ Hero ═══ */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    padding: var(--space-16) 0 var(--space-14);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 42% at 50% -6%, rgba(99, 102, 241, 0.16) 0%, transparent 62%),
+      radial-gradient(ellipse 40% 30% at 78% 18%, rgba(34, 211, 238, 0.07) 0%, transparent 65%),
+      linear-gradient(to bottom, rgba(139, 92, 246, 0.05), transparent 32%);
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 72% 58% at 50% 8%, black 26%, transparent 74%);
+    mask-image: radial-gradient(ellipse 72% 58% at 50% 8%, black 26%, transparent 74%);
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-announce {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-1-5) var(--space-4);
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-primary);
+    gap: var(--space-2-5);
+    padding: 5px var(--space-2) 5px var(--space-4);
+    border: 1px solid var(--border-secondary);
     border-radius: var(--radius-full);
-    margin-bottom: var(--space-6);
+    background: rgba(139, 92, 246, 0.08);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .hero-announce:hover {
+    border-color: var(--border-accent-hover);
+    color: var(--text-primary);
+  }
+
+  .ha-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    background: rgba(103, 232, 249, 0.14);
+    color: var(--text-accent);
+    font-size: 11px;
   }
 
   .hero-title {
-    font-size: clamp(2.25rem, 4vw, 3.75rem);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--leading-tight);
+    max-width: 850px;
+    margin: var(--space-6) 0 0;
+    font-size: clamp(2.25rem, 6vw, 4rem);
+    font-weight: var(--font-weight-extrabold);
     letter-spacing: var(--tracking-tight);
-    margin: 0 0 var(--space-5) 0;
+    line-height: 1.18;
+    color: var(--text-primary);
   }
 
-  .hero-title-accent { color: var(--text-brand); }
+  .hero-gradient {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 
   .hero-sub {
+    max-width: 580px;
+    margin: var(--space-5) 0 0;
     font-size: var(--text-lg);
-    color: var(--text-secondary);
     line-height: var(--leading-relaxed);
-    margin: 0 0 var(--space-8) 0;
-    max-width: 34rem;
-  }
-
-  .hero-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-
-  .hero-trust-note {
-    margin-top: var(--space-4);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
-
-  /* Terminal mockup */
-  .terminal {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    font-family: var(--font-mono);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .terminal-bar {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    background: var(--bg-tertiary);
-    border-bottom: 1px solid var(--border-primary);
-  }
-
-  .dot { width: 10px; height: 10px; border-radius: var(--radius-full); }
-  .dot-red { background: #ff5f57; }
-  .dot-yellow { background: #febc2e; }
-  .dot-green { background: #28c840; }
-
-  .terminal-title {
-    margin-inline-start: auto;
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
-
-  .terminal-body {
-    margin: 0;
-    padding: var(--space-5);
-    font-size: 0.8125rem;
-    line-height: 1.9;
-    color: var(--text-primary);
-    overflow-x: auto;
-    text-align: left;
-  }
-
-  .t-prompt { color: var(--text-accent); }
-  .t-str { color: #a5d6a7; }
-  .t-flag { color: var(--text-brand); }
-  .t-ok { color: #66bb6a; }
-  .t-dim { color: var(--text-muted); }
-  .t-star { color: #fdd835; }
-
-  .t-cursor::after {
-    content: '▋';
-    color: var(--interactive-primary);
-    animation: blink 1.2s steps(2) infinite;
-  }
-
-  @keyframes blink { 50% { opacity: 0; } }
-
-  .terminal-stats {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-5);
-    border-top: 1px solid var(--border-primary);
-    font-size: var(--text-xs);
     color: var(--text-secondary);
   }
 
-  .terminal-stats i { flex: 0 0 1px; height: 12px; background: var(--border-secondary); }
-
-  /* ── Trust bar ────────────────────────── */
-  .trustbar {
-    padding: var(--space-8) 0;
-    border-top: 1px solid var(--border-primary);
-    border-bottom: 1px solid var(--border-primary);
-    background: var(--bg-secondary);
-  }
-
-  .trust-label {
-    text-align: center;
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    margin: 0 0 var(--space-5) 0;
-  }
-
-  .trust-cities {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-4) var(--space-8);
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-tertiary);
+    gap: var(--space-3);
+    margin-top: var(--space-8);
   }
 
-  /* ── Sections shared ──────────────────── */
-  section.cats, section.stats, section.articles, section.testimonials { padding: var(--space-20) 0; }
-  section.cta { padding: var(--space-8) 0 var(--space-16); }
-
-  .section-head { max-width: 40rem; margin-bottom: var(--space-12); }
-  .section-head.row {
-    max-width: none;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-  }
-
-  .section-title {
-    font-size: clamp(1.5rem, 2.5vw, 2.125rem);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--tracking-tight);
-    margin: 0 0 var(--space-3) 0;
-  }
-
-  .section-sub { color: var(--text-secondary); margin: 0; }
-
-  .view-all {
+  .hero-npm {
+    margin: var(--space-5) 0 0;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.02);
+    font-family: var(--mono);
     font-size: var(--text-sm);
-    color: var(--text-brand);
-    text-decoration: none;
-    white-space: nowrap;
+    color: var(--text-muted);
   }
 
-  .view-all:hover { color: var(--interactive-primary-hover); }
+  .hero-window {
+    width: min(920px, 100%);
+    margin-top: var(--space-10);
+    overflow: hidden;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(19, 19, 29, 0.92), rgba(14, 14, 22, 0.96));
+    box-shadow:
+      0 30px 80px -20px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    text-align: left;
+  }
 
-  /* ── Categories grid ──────────────────── */
-  .cats-grid {
+  .win-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-primary);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .win-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .win-dot:nth-child(1) { background: #f87171; }
+  .win-dot:nth-child(2) { background: #fbbf24; }
+  .win-dot:nth-child(3) { background: #34d399; }
+
+  .win-title {
+    margin-inline-start: var(--space-3);
+    font-family: var(--mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .win-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .win-pane {
+    margin: 0;
+    padding: var(--space-5);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.75;
+    overflow-x: auto;
+  }
+
+  .win-term { border-left: 1px solid var(--border-primary); }
+
+  .win-status {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2-5) var(--space-4);
+    border-top: 1px solid var(--border-primary);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .ws-item { display: inline-flex; align-items: center; gap: 6px; color: #34d399; }
+
+  .ws-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+  }
+
+  .ws-dim { color: rgba(160, 160, 180, 0.5); }
+
+  @media (max-width: 820px) {
+    .win-grid { grid-template-columns: 1fr; }
+    .win-term { border-left: 0; border-top: 1px solid var(--border-primary); }
+  }
+  /* ═══ Platform (bento) ═══ */
+  .platform { padding: var(--space-20) 0 var(--space-14); }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-4);
   }
 
-  @media (min-width: 768px) { .cats-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 1024px) { .cats-grid { grid-template-columns: repeat(6, 1fr); } }
-
-  .cat-card {
+  .bento-card {
+    position: relative;
     display: flex;
     flex-direction: column;
+    padding: var(--space-6);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 55%), var(--bg-secondary);
+    transition: border-color var(--duration-normal) var(--ease-out), transform var(--duration-normal) var(--ease-out);
+  }
+
+  .bento-card:hover {
+    border-color: rgba(139, 92, 246, 0.45);
+    transform: translateY(-3px);
+  }
+
+  .bento-card.lg { grid-column: span 2; }
+  .bento-card.half { grid-column: span 2; }
+
+  .bc-icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: var(--space-5);
+    padding: 8px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.16), rgba(34, 211, 238, 0.12));
+    color: var(--color-brand-300);
+  }
+
+  .bc-icon :global(svg) { width: 100%; height: 100%; }
+  .bc-title { margin: 0; font-size: var(--text-lg); font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+  .bc-desc { margin: var(--space-2) 0 0; font-size: var(--text-sm); line-height: var(--leading-relaxed); color: var(--text-secondary); }
+
+  .viz { margin-top: auto; padding-top: var(--space-5); }
+
+  .viz-map svg { width: 100%; height: auto; display: block; }
+
+  .viz-table { display: flex; flex-direction: column; gap: var(--space-2); }
+  .vt-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 7px var(--space-3);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .vt-row code { color: var(--text-accent); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vt-row b { color: #fbbf24; font-weight: 600; }
+  .vt-row i { color: #34d399; font-style: normal; }
+
+  .viz-urls { display: flex; flex-direction: column; gap: var(--space-2); }
+  .vu-row {
+    display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-6) var(--space-4);
-    background: var(--bg-secondary);
+    align-self: flex-start;
+    max-width: 100%;
+    padding: 6px var(--space-3);
     border: 1px solid var(--border-primary);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    transition: border-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+  .vu-row code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; }
+  .vu-lock { font-size: 10px; }
+
+  .viz-chart svg { width: 100%; height: auto; display: block; }
+  .vc-legend { display: flex; gap: var(--space-5); margin-top: var(--space-3); }
+  .vc-item { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); color: var(--text-muted); }
+  .vc-item i { width: 9px; height: 9px; border-radius: 3px; }
+
+  /* ═══ Experience (DX) ═══ */
+  .dx { position: relative; padding: var(--space-14) 0; }
+
+  .dx-rule,
+  .obs-rule {
+    height: 1px;
+    margin-bottom: var(--space-20);
+    background: linear-gradient(to left, transparent, var(--border-primary) 18%, var(--border-primary) 82%, transparent);
   }
 
-  .cat-card:hover { border-color: var(--border-secondary); transform: translateY(-2px); }
-
-  .cat-icon { font-size: 1.75rem; line-height: 1; }
-  .cat-name { font-weight: var(--font-weight-medium); color: var(--text-primary); }
-  .cat-count { font-size: var(--text-xs); color: var(--text-muted); }
-
-  /* ── Stats ────────────────────────────── */
-  .stats {
-    border-top: 1px solid var(--border-primary);
-    border-bottom: 1px solid var(--border-primary);
-    background: var(--bg-secondary);
-    padding: var(--space-12) 0 !important;
-  }
-
-  .stats-grid {
+  .dx-grid,
+  .obs-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-8);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+    gap: clamp(var(--space-8), 6vw, var(--space-16));
   }
 
-  @media (min-width: 768px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
-
-  .stat-cell { display: flex; flex-direction: column; gap: var(--space-1); }
-
-  .stat-value {
-    font-size: clamp(2rem, 3.5vw, 3rem);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: var(--tracking-tight);
-    color: var(--text-primary);
-  }
-
-  .stat-label { font-size: var(--text-sm); color: var(--text-muted); }
-
-  /* ── Articles ─────────────────────────── */
-  .articles-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-5);
-  }
-
-  .article-card {
+  .dx-copy,
+  .obs-copy {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    padding: var(--space-6);
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    transition: border-color var(--duration-fast) var(--ease-out);
+    align-items: flex-start;
+    gap: var(--space-4);
   }
 
-  .article-card:hover { border-color: var(--border-secondary); }
+  .dx-copy .sec-title,
+  .obs-copy .sec-title { font-size: clamp(1.6rem, 2.8vw, 2.25rem); }
+  .dx-copy .sec-sub,
+  .obs-copy .sec-sub { font-size: var(--text-base); }
 
-  .article-cat {
-    align-self: flex-start;
+  .dx-checks { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3-5); }
+  .dx-checks li { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); font-weight: var(--font-weight-medium); color: var(--text-primary); }
+  .dx-checks svg { width: 17px; height: 17px; flex-shrink: 0; color: #34d399; }
+
+  .editor {
+    overflow: hidden;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(19, 19, 29, 0.92), rgba(14, 14, 22, 0.97));
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.55);
+  }
+
+  .ed-tabs { display: flex; align-items: center; gap: var(--space-1); padding: var(--space-2-5) var(--space-3); border-bottom: 1px solid var(--border-primary); }
+
+  .ed-tab {
+    padding: var(--space-1-5) var(--space-4);
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
     font-size: var(--text-xs);
     font-weight: var(--font-weight-medium);
-    color: var(--text-brand);
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    border-radius: var(--radius-full);
-    padding: 2px var(--space-3);
+    font-family: inherit;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
   }
 
-  .article-title { font-size: var(--text-lg); font-weight: var(--font-weight-semibold); margin: 0; color: var(--text-primary); }
-  .article-excerpt { font-size: var(--text-sm); color: var(--text-secondary); line-height: var(--leading-relaxed); margin: 0; }
-  .article-meta { font-size: var(--text-xs); color: var(--text-muted); margin-top: auto; }
+  .ed-tab.is-active { background: rgba(255, 255, 255, 0.06); color: var(--text-primary); }
 
-  /* ── Testimonials ─────────────────────── */
-  .testi-grid {
+  .ed-dots { display: flex; gap: 5px; margin-inline-start: auto; padding-inline-end: var(--space-2); }
+  .ed-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--border-secondary); }
+
+  .ed-body { margin: 0; padding: var(--space-6); font-family: var(--mono); font-size: 13px; line-height: 1.8; overflow-x: auto; }
+  /* ═══ Observability ═══ */
+  .obs { position: relative; padding: var(--space-14) 0 var(--space-20); }
+  .obs-link { margin-top: var(--space-2); }
+
+  .obs-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+
+  .obs-panel {
+    overflow: hidden;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(19, 19, 29, 0.92), rgba(14, 14, 22, 0.97));
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.55);
+  }
+
+  .obs-tabs { display: flex; gap: var(--space-5); padding: var(--space-3) var(--space-5) 0; }
+
+  .obs-tab {
+    font-family: var(--mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    padding-bottom: var(--space-3);
+  }
+
+  .obs-tab.is-active { color: var(--text-primary); box-shadow: inset 0 -2px 0 var(--interactive-primary); }
+
+  .trace { padding: var(--space-6) var(--space-5) var(--space-4); border-bottom: 1px solid var(--border-primary); }
+
+  .tr-row {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
+    grid-template-columns: 76px minmax(120px, 150px) 1fr 44px;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
   }
 
-  @media (min-width: 768px) { .testi-grid { grid-template-columns: repeat(3, 1fr); } }
+  .tr-svc { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+  .tr-op { font-family: var(--mono); font-size: 11px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tr-lane { height: 8px; border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.05); }
+  .tr-lane i { display: block; height: 100%; border-radius: var(--radius-full); opacity: 0.9; }
+  .tr-dur { font-family: var(--mono); font-size: 11px; color: var(--text-muted); text-align: right; }
+  .tr-axis { display: flex; justify-content: space-between; margin-top: var(--space-2); font-family: var(--mono); font-size: 10px; color: rgba(160, 160, 180, 0.4); }
+
+  .logbox { padding: var(--space-4) var(--space-5); font-family: var(--mono); }
+  .lb-head { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; }
+
+  .lb-dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px rgba(52, 211, 153, 0.8); animation: pulseDot 2s infinite; }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  .lb-line { display: flex; gap: var(--space-3); margin: 0 0 var(--space-1-5); font-size: 11px; line-height: 1.7; }
+  .lb-time { color: rgba(160, 160, 180, 0.5); flex-shrink: 0; }
+
+  .lb-level { flex-shrink: 0; width: 42px; font-weight: 600; }
+  .lv-info { color: #38bdf8; }
+  .lv-warn { color: #fbbf24; }
+  .lv-ok { color: #34d399; }
+
+  .lb-msg { color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-meta { color: rgba(160, 160, 180, 0.45); }
+  /* ═══ Testimonials ═══ */
+  .testimonials { padding: var(--space-14) 0; }
+
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
 
   .testi-card {
     margin: 0;
     padding: var(--space-6);
-    background: var(--bg-secondary);
     border: 1px solid var(--border-primary);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 55%), var(--bg-secondary);
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
   }
 
-  .testi-card blockquote {
-    margin: 0;
-    font-size: var(--text-base);
-    line-height: var(--leading-relaxed);
-    color: var(--text-primary);
-  }
-
+  .testi-card blockquote { margin: 0; }
+  .testi-card blockquote p { margin: 0; font-size: var(--text-base); line-height: var(--leading-relaxed); color: var(--text-primary); }
   .testi-card figcaption { display: flex; align-items: center; gap: var(--space-3); margin-top: auto; }
 
   .testi-avatar {
     width: 40px;
     height: 40px;
     border-radius: var(--radius-full);
-    background: var(--bg-quaternary);
-    border: 1px solid var(--border-secondary);
-    color: var(--text-brand);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: var(--font-weight-bold);
+    color: #ffffff;
     flex-shrink: 0;
   }
+
+  .ta-a { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .ta-b { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+  .ta-c { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
 
   .testi-who { display: flex; flex-direction: column; }
   .testi-who strong { font-size: var(--text-sm); color: var(--text-primary); font-weight: var(--font-weight-semibold); }
   .testi-who small { font-size: var(--text-xs); color: var(--text-muted); }
+  /* ═══ CTA banner ═══ */
+  .cta { position: relative; padding: var(--space-10) 0 var(--space-24); }
 
-  /* ── Final CTA ────────────────────────── */
-  .cta-banner {
-    padding: var(--space-16) var(--space-6);
-    background:
-      radial-gradient(ellipse at 50% 120%, rgba(139, 92, 246, 0.14) 0%, transparent 60%),
-      var(--bg-secondary);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-xl);
-    text-align: center;
+  .cta-inner {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-4);
+    text-align: center;
+    padding: var(--space-16) var(--space-6);
+    border: 1px solid var(--border-secondary);
+    border-radius: calc(var(--radius-xl) + 6px);
+    background:
+      radial-gradient(ellipse 65% 90% at 50% 118%, rgba(99, 102, 241, 0.22) 0%, transparent 62%),
+      radial-gradient(ellipse 40% 60% at 50% 115%, rgba(34, 211, 238, 0.12) 0%, transparent 65%),
+      var(--bg-secondary);
+    isolation: isolate;
   }
 
-  .cta-title { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-tight); margin: 0; }
-  .cta-sub { color: var(--text-secondary); margin: 0 0 var(--space-4) 0; }
-  .cta-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+  .cta-glow {
+    position: absolute;
+    top: 0;
+    right: 50%;
+    transform: translateX(50%);
+    width: min(640px, 80%);
+    height: 1px;
+    background: linear-gradient(to left, transparent, rgba(103, 232, 249, 0.6), transparent);
+  }
+
+  .cta-title { margin: 0; font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: var(--font-weight-bold); letter-spacing: var(--tracking-tight); line-height: 1.22; color: var(--text-primary); }
+  .cta-sub { margin: var(--space-4) 0 0; font-size: var(--text-lg); color: var(--text-secondary); }
+  .cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); margin-top: var(--space-8); }
+
+  .cta-points { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-8); margin: var(--space-10) 0 0; padding: 0; }
+
+  .cta-points li { display: flex; flex-direction: column; gap: var(--space-1); }
+  .cta-points strong { font-size: var(--text-base); font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+  .cta-points span { font-size: var(--text-xs); color: var(--text-muted); }
+
+  /* ═══ Responsive ═══ */
+  @media (max-width: 1024px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bento-card.lg, .bento-card.half { grid-column: span 2; }
+    .dx-grid, .obs-grid { grid-template-columns: 1fr; }
+    .obs-panel { order: -1; }
+    .testi-grid { grid-template-columns: 1fr; }
+  }
 
   @media (max-width: 768px) {
-    .hero { padding: 3rem 0 2rem; }
-    section.cats, section.stats, section.articles, section.testimonials { padding: var(--space-14) 0; }
-    section.cta { padding: var(--space-4) 0 var(--space-12); }
+    .hero { padding: var(--space-10) 0; }
+    .hero-actions .btn { width: 100%; justify-content: center; }
+    .platform { padding: var(--space-14) 0 var(--space-10); }
+    .sec-head { margin-bottom: var(--space-8); }
+    .dx, .obs, .testimonials { padding: var(--space-10) 0; }
+    .dx-rule, .obs-rule { margin-bottom: var(--space-12); }
+    .tr-row { grid-template-columns: 62px 1fr 40px; }
+    .tr-op { display: none; }
+    .cta { padding-bottom: var(--space-16); }
+    .cta-inner { padding: var(--space-12) var(--space-5); }
+    .cta-points { gap: var(--space-6); }
   }
 </style>
