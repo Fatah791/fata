@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/Fatah791/fata/issues"
   },
-  "homepage": "https://github.com/Fatah791/fata#readme"
+  "homepage": "https://github.com/Fatah791/fata#readme",
+  "dependencies": {
+    "astro": "^7.2.9"
+  }
 }
