@@ -1,27 +1,28 @@
 {
-  "name": "python",
+  "name": "fata",
   "version": "1.0.0",
-  "description": "",
+  "description": "Best-of Iran - بهترین کسب‌وکارهای ایران",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
     "preview": "astro preview",
     "build": "astro build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fatah791/fata.git"
+    "url": "https://github.com/Fatah791/fata.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Fatah791",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Fatah791/fata/issues"
   },
   "homepage": "https://github.com/Fatah791/fata#readme",
   "dependencies": {
-    "astro": "^7.2.9"
+    "astro": "^7.2.9",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0"
   }
 }
