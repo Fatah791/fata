@@ -1,0 +1,221 @@
+---
+import '../styles/global.css';
+---
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="fa">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ثبت کسب و کار | بست آف ایران</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col antialiased">
+  <style>
+    .glass-card {
+      background: rgba(26, 26, 30, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(42, 42, 46, 0.5);
+    }
+    input[type="text"], input[type="tel"], input[type="email"], select, textarea {
+      background-color: #0D0D0F !important;
+      border-color: #2A2A2E !important;
+      color: #EAEAEA !important;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #F5B841 !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  </style>
+
+  <!-- TopNavBar -->
+  <header class="bg-surface border-b border-surface-variant flex flex-row-reverse justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-base z-50 sticky top-0 full-width">
+    <a class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary" href="/">Best-of Iran</a>
+    <nav class="hidden md:flex gap-md">
+      <a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="/register-business">ثبت کسب و کار</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="/">متدولوژی</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="/">دسته‌بندی‌ها</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="/">شهرها</a>
+    </nav>
+    <button class="hidden md:block font-label-md text-label-md text-on-background px-4 py-2 rounded border border-outline-variant hover:border-primary transition-colors">ورود / عضویت</button>
+    <button class="md:hidden text-on-surface">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </header>
+
+  <main class="flex-grow w-full max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+    <!-- Hero Section -->
+    <section class="text-center mb-xl">
+      <h1 class="font-headline-xl text-headline-xl text-on-surface mb-base">ثبت رایگان کسب و کار در بست‌اف ایران</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">کسب و کار خود را در معتبرترین دایرکتوری مشاغل برتر ایران ثبت کنید و دیده شدن خود را به سطح جدیدی ارتقا دهید.</p>
+    </section>
+
+    <!-- Main Content Layout (Form + Sidebar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+      <!-- Registration Form Area (Bento-style multi-step) -->
+      <div class="lg:col-span-8 space-y-md">
+        <!-- Steps Progress -->
+        <div class="flex justify-between items-center mb-lg relative before:content-[''] before:absolute before:top-1/2 before:w-full before:h-[2px] before:bg-surface-variant before:-z-10 before:-translate-y-1/2">
+          <div class="flex flex-col items-center gap-2 bg-background px-2">
+            <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold font-label-md text-label-md">۱</div>
+            <span class="font-label-sm text-label-sm text-primary">اطلاعات پایه</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 bg-background px-2">
+            <div class="w-8 h-8 rounded-full bg-surface-container border border-surface-variant text-on-surface-variant flex items-center justify-center font-bold font-label-md text-label-md">۲</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">تماس و شبکه‌ها</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 bg-background px-2">
+            <div class="w-8 h-8 rounded-full bg-surface-container border border-surface-variant text-on-surface-variant flex items-center justify-center font-bold font-label-md text-label-md">۳</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">تصاویر</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 bg-background px-2">
+            <div class="w-8 h-8 rounded-full bg-surface-container border border-surface-variant text-on-surface-variant flex items-center justify-center font-bold font-label-md text-label-md">۴</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">موقعیت</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Form Content -->
+        <div class="glass-card rounded-[24px] p-md md:p-lg">
+          <h2 class="font-headline-md text-headline-md text-on-surface mb-md">اطلاعات پایه کسب و کار</h2>
+          <form class="space-y-md">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
+              <div>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-2">نام کسب و کار *</label>
+                <input class="w-full p-3 rounded-lg border focus:ring-1 focus:ring-primary-container font-body-md text-body-md" placeholder="مثال: رستوران مسلم" type="text"/>
+              </div>
+              <div>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-2">دسته‌بندی اصلی *</label>
+                <select class="w-full p-3 rounded-lg border focus:ring-1 focus:ring-primary-container font-body-md text-body-md">
+                  <option disabled selected value="">انتخاب کنید...</option>
+                  <option value="restaurants">رستوران‌ها</option>
+                  <option value="hotels">هتل‌ها</option>
+                  <option value="medical">خدمات پزشکی</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-2">شهر *</label>
+              <select class="w-full p-3 rounded-lg border focus:ring-1 focus:ring-primary-container font-body-md text-body-md">
+                <option disabled selected value="">انتخاب شهر...</option>
+                <option value="tehran">تهران</option>
+                <option value="isfahan">اصفهان</option>
+                <option value="shiraz">شیراز</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-2">توضیحات کوتاه (حداکثر ۲۰۰ کاراکتر)</label>
+              <textarea class="w-full p-3 rounded-lg border focus:ring-1 focus:ring-primary-container font-body-md text-body-md resize-none" placeholder="کسب و کار خود را به اختصار معرفی کنید..." rows="4"></textarea>
+            </div>
+            <div class="flex justify-end pt-sm">
+              <button class="bg-primary text-on-primary px-lg py-3 rounded-lg font-label-md text-label-md font-semibold hover:bg-primary-container transition-colors" type="button">مرحله بعد</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Sidebar (Trust & Pricing) -->
+      <div class="lg:col-span-4 space-y-md">
+        <!-- Trust Section -->
+        <div class="bg-surface-container rounded-[24px] border border-outline-variant p-md">
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">verified</span>
+            چرا با ما باشید؟
+          </h3>
+          <ul class="space-y-sm mt-md">
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-tertiary mt-1">trending_up</span>
+              <div>
+                <h4 class="font-label-md text-label-md text-on-surface">افزایش بازدید هدفمند</h4>
+                <p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">روزانه هزاران کاربر به دنبال بهترین‌ها در سایت ما جستجو می‌کنند.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary-container mt-1">star</span>
+              <div>
+                <h4 class="font-label-md text-label-md text-on-surface">نمایه اختصاصی و حرفه‌ای</h4>
+                <p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">صفحه‌ای کامل با تصاویر، نظرات و اطلاعات تماس مستقیم.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-secondary mt-1">workspace_premium</span>
+              <div>
+                <h4 class="font-label-md text-label-md text-on-surface">دریافت نشان اعتماد</h4>
+                <p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">کسب و کارهای تایید شده نشان ویژه دریافت می‌کنند.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Plans Comparison -->
+        <div class="bg-surface-container rounded-[24px] border border-outline-variant p-md overflow-hidden relative">
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-md">پلن‌های عضویت</h3>
+          <div class="space-y-sm">
+            <!-- Free Plan -->
+            <div class="p-3 border border-outline-variant rounded-xl bg-surface-dim">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-label-md text-label-md text-on-surface font-bold">پایه (رایگان)</span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-variant px-2 py-1 rounded">همیشه رایگان</span>
+              </div>
+              <ul class="font-body-md text-body-md text-sm text-on-surface-variant space-y-1">
+                <li>✓ ثبت اطلاعات پایه</li>
+                <li>✓ نمایش در جستجو</li>
+                <li>✓ تا ۳ تصویر</li>
+              </ul>
+            </div>
+            <!-- Premium Plan -->
+            <div class="p-3 border border-primary rounded-xl bg-surface/50 relative">
+              <span class="absolute -top-2 left-4 bg-primary text-on-primary text-[10px] px-2 py-0.5 rounded font-bold">پیشنهادی</span>
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-label-md text-label-md text-primary font-bold">ویژه (Premium)</span>
+              </div>
+              <ul class="font-body-md text-body-md text-sm text-on-surface-variant space-y-1">
+                <li class="text-on-surface">✓ جایگاه بالاتر در لیست‌ها</li>
+                <li>✓ گالری تصاویر نامحدود</li>
+                <li>✓ لینک مستقیم به سایت</li>
+                <li>✓ حذف تبلیغات رقبا</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-surface-container grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-gutter px-margin-mobile md:px-margin-desktop py-xl w-full text-right rtl border-t border-surface-variant mt-auto">
+    <div class="col-span-2 md:col-span-4 lg:col-span-6 mb-md">
+      <div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary">Best-of Iran</div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">تهران</a>
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">اصفهان</a>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">شیراز</a>
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">تبریز</a>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">مشهد</a>
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">رستوران‌ها</a>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">هتل‌ها</a>
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">خدمات پزشکی</a>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">وکلای پایه یک</a>
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">درباره ما</a>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">تماس با ما</a>
+      <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" href="/">قوانین و مقررات</a>
+    </div>
+    <div class="col-span-2 md:col-span-4 lg:col-span-6 mt-lg pt-sm border-t border-surface-variant font-body-md text-body-md text-on-surface-variant text-center">
+      © ۲۰۲۴ بست آف ایران. تمامی حقوق محفوظ است.
+    </div>
+  </footer>
+</body>
+</html>
