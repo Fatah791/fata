@@ -1,53 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --color-secondary-container: #00a572;
-  --color-background: #131315;
-  --color-on-secondary-container: #00311f;
-  --color-on-tertiary-fixed: #002109;
-  --color-inverse-surface: #e5e1e4;
-  --color-on-primary: #422c00;
-  --color-on-tertiary-container: #005d27;
-  --color-primary-fixed-dim: #fabc45;
-  --color-error: #ffb4ab;
-  --color-on-background: #e5e1e4;
-  --color-tertiary: #5cfb88;
-  --color-secondary: #4edea3;
-  --color-surface: #131315;
-  --color-on-error-container: #ffdad6;
-  --color-tertiary-fixed: #66ff8e;
-  --color-on-tertiary: #003915;
-  --color-surface-dim: #131315;
-  --color-secondary-fixed: #6ffbbe;
-  --color-primary-fixed: #ffdea9;
-  --color-surface-variant: #353437;
-  --color-outline: #9c8f7b;
-  --color-tertiary-container: #37de6f;
-  --color-secondary-fixed-dim: #4edea3;
-  --color-primary: #ffd99a;
-  --color-surface-container-high: #2a2a2c;
-  --color-tertiary-fixed-dim: #3de273;
-  --color-on-surface: #e5e1e4;
-  --color-on-secondary-fixed-variant: #005236;
-  --color-inverse-primary: #7d5800;
-  --color-surface-container: #201f21;
-  --color-on-primary-fixed: #271900;
-  --color-surface-container-low: #1b1b1d;
-  --color-inverse-on-surface: #313032;
-  --color-on-surface-variant: #d4c4af;
-  --color-surface-bright: #39393b;
-  --color-surface-tint: #fabc45;
-  --color-on-secondary-fixed: #002113;
+  /* === Enhanced Dark Theme === */
+  --color-background: #0a0a0c;
+  --color-on-background: #f0ece8;
+
+  --color-surface: #121214;
+  --color-surface-dim: #0e0e10;
+  --color-surface-bright: #2a2a2e;
+  --color-on-surface: #f0ece8;
+
+  --color-surface-variant: #3a3a40;
+  --color-on-surface-variant: #c8c0b6;
+
+  --color-surface-container: #1a1a1e;
+  --color-surface-container-low: #161618;
+  --color-surface-container-high: #222226;
+  --color-surface-container-highest: #2e2e34;
+  --color-surface-container-lowest: #08080a;
+
+  --color-primary: #f5c869;
+  --color-primary-container: #d4a536;
+  --color-on-primary: #2a1d00;
+  --color-on-primary-container: #5c4200;
+  --color-primary-fixed: #ffe8b8;
+  --color-primary-fixed-dim: #e8b84a;
+  --color-on-primary-fixed: #221800;
+  --color-on-primary-fixed-variant: #4a3500;
+  --color-inverse-primary: #7a5500;
+  --color-surface-tint: #f5c869;
+
+  --color-secondary: #6eeab8;
+  --color-secondary-container: #00b57e;
   --color-on-secondary: #003824;
-  --color-outline-variant: #504535;
-  --color-error-container: #93000a;
-  --color-primary-container: #f5b841;
-  --color-on-error: #690005;
-  --color-surface-container-highest: #353437;
-  --color-on-primary-fixed-variant: #5f4100;
+  --color-on-secondary-container: #00301e;
+  --color-secondary-fixed: #85f5c8;
+  --color-secondary-fixed-dim: #5cd9a3;
+  --color-on-secondary-fixed: #002012;
+  --color-on-secondary-fixed-variant: #005236;
+
+  --color-tertiary: #7dffa0;
+  --color-tertiary-container: #45e878;
+  --color-on-tertiary: #003915;
+  --color-on-tertiary-container: #005d27;
+  --color-tertiary-fixed: #8affb0;
+  --color-tertiary-fixed-dim: #52e880;
+  --color-on-tertiary-fixed: #002009;
   --color-on-tertiary-fixed-variant: #005322;
-  --color-surface-container-lowest: #0e0e10;
-  --color-on-primary-container: #6a4a00;
+
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  --color-outline: #a0988a;
+  --color-outline-variant: #554d42;
+
+  --color-inverse-surface: #343032;
+  --color-inverse-on-surface: #e8e2e4;
 
   --radius: 0.25rem;
   --radius-lg: 0.5rem;
@@ -103,10 +113,69 @@
   --text-body-md--font-weight: 400;
 }
 
+/* === Premium Dark Background === */
 body {
   font-family: 'Vazirmatn', sans-serif;
+  background-color: #0a0a0c;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 200, 105, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(110, 234, 184, 0.04), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(125, 255, 160, 0.04), transparent);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
+/* === Glassmorphism Card === */
+.glass-card {
+  background: rgba(26, 26, 30, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* === Gradient Text === */
+.gradient-text {
+  background: linear-gradient(135deg, #f5c869 0%, #ffe8b8 50%, #f5c869 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === Glow Effect === */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(245, 200, 105, 0.3), 0 0 40px rgba(245, 200, 105, 0.1);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 20px rgba(110, 234, 184, 0.3), 0 0 40px rgba(110, 234, 184, 0.1);
+}
+
+/* === Subtle Grid Pattern === */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* === Noise Texture Overlay === */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* === Scrollbar === */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -116,6 +185,7 @@ body {
   scrollbar-width: none;
 }
 
+/* === Material Symbols === */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined', sans-serif;
   font-weight: normal;
@@ -127,4 +197,11 @@ body {
   word-wrap: normal;
   white-space: pre;
   direction: ltr;
+}
+
+/* === Smooth Transitions === */
+* {
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
 }
