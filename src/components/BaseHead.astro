@@ -1,0 +1,66 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  canonicalURL?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'مرجع تخصصی معرفی بهترین کسب‌وکارهای ایران با بررسی‌های دقیق و واقعی. رستوران‌ها، هتل‌ها، خدمات پزشکی و بیشتر.',
+  canonicalURL,
+  ogImage = '/og-image.png',
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const siteTitle = 'Best-of Iran';
+const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
+const url = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
+---
+
+<!-- Primary Meta Tags -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
+<meta name="description" content={description} />
+<meta name="author" content="Best-of Iran" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+<link rel="canonical" href={url} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={url} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:locale" content="fa_IR" />
+<meta property="og:site_name" content={siteTitle} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={url} />
+<meta property="twitter:title" content={fullTitle} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={ogImageUrl} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Font Preload (Critical for LCP) -->
+<link rel="preload" href="/fonts/Vazirmatn-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+<link rel="preload" href="/fonts/Vazirmatn-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+<link rel="preload" href="/fonts/MaterialSymbolsOutlined.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+
+<!-- Font Stylesheets -->
+<link rel="stylesheet" href="/fonts/vazirmatn.css" />
+<link rel="stylesheet" href="/fonts/material-symbols.css" />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#131315" />
+<meta name="color-scheme" content="dark" />
