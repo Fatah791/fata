@@ -1,0 +1,11 @@
+import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
+import keystatic from './keystatic.config';
+
+export default defineConfig({
+  site: 'https://fata-eyqblsquc-fata3.vercel.app',
+  vite: {
+    plugins: [tailwindcss()],
+  },
+  integrations: [keystatic],
+});
