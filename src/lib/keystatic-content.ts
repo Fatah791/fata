@@ -43,48 +43,96 @@ function parseFrontmatter(content: string) {
   const frontmatter = match[1];
   const body = match[2] || '';
 
-  // Simple YAML-like parser for frontmatter (handles nested objects)
+  // Simple YAML-like parser for frontmatter (handles nested objects and block scalars)
   const data: Record<string, unknown> = {};
-  const stack: Array<{ key: string; obj: Record<string, unknown>; indent: number }> = [];
-  let currentObj = data;
-  let currentIndent = 0;
+  const lines = frontmatter.split('\n');
+  let i = 0;
 
-  for (const line of frontmatter.split('\n')) {
-    if (line.trim() === '') continue;
+  while (i < lines.length) {
+    const line = lines[i];
+    if (line.trim() === '') {
+      i++;
+      continue;
+    }
 
     const indent = line.length - line.trimStart().length;
     const trimmed = line.trim();
 
     // Handle array items
     if (trimmed.startsWith('- ')) {
-      // This is an array item - for simplicity, skip complex array handling
+      // Simple array handling - collect all array items
+      const arrayKey = Object.keys(data).pop();
+      if (arrayKey && Array.isArray(data[arrayKey])) {
+        (data[arrayKey] as unknown[]).push(parseValue(trimmed.slice(2)));
+      }
+      i++;
       continue;
     }
 
-    if (!trimmed.includes(':')) continue;
+    if (!trimmed.includes(':')) {
+      i++;
+      continue;
+    }
 
     const colonIndex = trimmed.indexOf(':');
     const key = trimmed.slice(0, colonIndex).trim();
     const value = trimmed.slice(colonIndex + 1).trim();
 
-    // Pop stack if we're at same or lower indent
-    while (stack.length > 0 && stack[stack.length - 1].indent >= indent) {
-      stack.pop();
-    }
-
-    currentObj = stack.length > 0 ? stack[stack.length - 1].obj : data;
-
-    if (value === '') {
+    if (value === '|') {
+      // Block scalar - collect all indented lines
+      i++;
+      const blockLines: string[] = [];
+      while (i < lines.length) {
+        const nextLine = lines[i];
+        if (nextLine.trim() === '') {
+          blockLines.push('');
+          i++;
+          continue;
+        }
+        const nextIndent = nextLine.length - nextLine.trimStart().length;
+        if (nextIndent <= indent) break;
+        blockLines.push(nextLine.slice(indent + 2)); // Remove the extra indentation
+        i++;
+      }
+      data[key] = blockLines.join('\n');
+      continue;
+    } else if (value === '') {
       // This is a nested object
       const newObj: Record<string, unknown> = {};
-      currentObj[key] = newObj;
-      stack.push({ key, obj: newObj, indent });
+      data[key] = newObj;
+      i++;
+
+      // Parse nested object
+      while (i < lines.length) {
+        const nestedLine = lines[i];
+        if (nestedLine.trim() === '') {
+          i++;
+          continue;
+        }
+        const nestedIndent = nestedLine.length - nestedLine.trimStart().length;
+        if (nestedIndent <= indent) break;
+
+        const nestedTrimmed = nestedLine.trim();
+        if (nestedTrimmed.includes(':')) {
+          const nestedColonIndex = nestedTrimmed.indexOf(':');
+          const nestedKey = nestedTrimmed.slice(0, nestedColonIndex).trim();
+          const nestedValue = nestedTrimmed.slice(nestedColonIndex + 1).trim();
+          newObj[nestedKey] = parseValue(nestedValue);
+        }
+        i++;
+      }
+      continue;
     } else {
-      currentObj[key] = parseValue(value);
+      data[key] = parseValue(value);
     }
+    i++;
   }
 
-  return { data, content: body };
+  // If there's a 'content' field from the block scalar, use it as the body
+  // This handles Keystatic's format where content is stored in the frontmatter
+  const contentBody = typeof data.content === 'string' ? data.content : body;
+
+  return { data, content: contentBody };
 }
 
 function parseValue(value: string): unknown {
@@ -120,11 +168,46 @@ function readFileContent(dir: string, slug: string): { data: Record<string, unkn
   for (const ext of ['.mdoc', '.mdx', '.md']) {
     const filePath = join(fullPath, `${slug}${ext}`);
     if (existsSync(filePath)) {
-      const content = readFileSync(filePath, 'utf-8');
-      return parseFrontmatter(content);
+      const fileContent = readFileSync(filePath, 'utf-8');
+      return parseFrontmatter(fileContent);
     }
   }
   return null;
+}
+
+// Simple markdown to HTML renderer
+function markdownToHtml(markdown: string): string {
+  let html = markdown;
+
+  // Headers
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+  // Bold and italic
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+  // Unordered lists
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+
+  // Ordered lists
+  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+  // Blockquotes
+  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+
+  // Paragraphs - wrap lines that aren't already HTML tags
+  html = html.replace(/^(?!<[a-z/])(.+)$/gm, '<p>$1</p>');
+
+  // Clean up empty paragraphs
+  html = html.replace(/<p>\s*<\/p>/g, '');
+
+  return html;
 }
 
 // Helper: Get all posts sorted by date descending
@@ -155,7 +238,14 @@ export async function getAllPosts(): Promise<Array<{ slug: string; data: Record<
   return slugs
     .map(slug => {
       const result = readFileContent('src/content/articles', slug);
-      return result ? { slug, data: result.data } : null;
+      if (!result) return null;
+      return {
+        slug,
+        data: {
+          ...result.data,
+          content: result.content, // Include raw markdown content for fallback rendering
+        }
+      };
     })
     .filter(Boolean) as Array<{ slug: string; data: Record<string, unknown> }>;
 }
@@ -173,7 +263,14 @@ export async function getPostBySlug(slug: string): Promise<{ slug: string; data:
 
   // Fallback: read from file system
   const result = readFileContent('src/content/articles', slug);
-  return result ? { slug, data: result.data } : null;
+  if (!result) return null;
+  return {
+    slug,
+    data: {
+      ...result.data,
+      content: result.content, // Include raw markdown content for fallback rendering
+    }
+  };
 }
 
 // Helper: Get all categories

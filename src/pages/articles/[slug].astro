@@ -1,6 +1,28 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
-import { getAllPosts, getPostBySlug } from '../../lib/keystatic-content';
+import { getAllPosts } from '../../lib/keystatic-content';
+
+interface PostData {
+  title?: string | { name: string };
+  date?: string;
+  author?: string;
+  excerpt?: string;
+  category?: string;
+  tags?: string[];
+  featuredImage?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: string;
+  content?: string | (() => Promise<string>);
+  readingTime?: string;
+  schemaType?: string;
+  [key: string]: unknown;
+}
+
+interface Post {
+  slug: string;
+  data: PostData;
+}
 
 // Prerender this page at build time
 export const prerender = true;
@@ -10,20 +32,24 @@ export async function getStaticPaths() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { post: post as unknown as Post },
   }));
 }
 
-const { post } = Astro.props;
+const { post } = Astro.props as { post: Post };
 const { data } = post;
 
 // Handle both string and object title formats
-const postTitle = typeof data.title === 'string'
+// For Keystatic slug fields, name contains the slug, so prefer seoTitle
+const rawTitle = typeof data.title === 'string'
   ? data.title
   : data.title?.name || post.slug;
 
+// Use seoTitle as the main display title if available, otherwise use rawTitle
+const postTitle = data.seoTitle || rawTitle || 'مقاله';
+
 // SEO fields
-const seoTitle = data.seoTitle || postTitle || 'مقاله';
+const seoTitle = postTitle;
 const seoDescription = data.seoDescription || data.excerpt || '';
 const ogImage = data.ogImage || '/og-image.png';
 
@@ -31,11 +57,52 @@ const ogImage = data.ogImage || '/og-image.png';
 let contentHtml = '';
 try {
   if (data.content) {
-    const rendered = await data.content();
-    contentHtml = rendered;
+    // If content is a function (from Keystatic reader), call it
+    if (typeof data.content === 'function') {
+      contentHtml = await data.content();
+    } else if (typeof data.content === 'string') {
+      // Fallback: render markdown content directly
+      contentHtml = markdownToHtml(data.content);
+    }
   }
 } catch (e) {
   console.error('Error rendering content:', e);
+}
+
+// Simple markdown to HTML renderer
+function markdownToHtml(markdown: string): string {
+  if (!markdown) return '';
+  let html = markdown;
+
+  // Headers
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+  // Bold and italic
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+  // Unordered lists
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+
+  // Ordered lists
+  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+  // Blockquotes
+  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+
+  // Paragraphs - wrap lines that aren't already HTML tags
+  html = html.replace(/^(?!<[a-z/])(.+)$/gm, '<p>$1</p>');
+
+  // Clean up empty paragraphs
+  html = html.replace(/<p>\s*<\/p>/g, '');
+
+  return html;
 }
 
 // Format date for display
