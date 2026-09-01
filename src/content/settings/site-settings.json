@@ -1,0 +1,20 @@
+{
+  "siteName": "Best-of Iran",
+  "siteDescription": "بهترین کسب‌وکارهای ایران",
+  "logo": null,
+  "logoDark": null,
+  "favicon": null,
+  "ogImage": null,
+  "socialLinks": {
+    "telegram": "https://t.me/bestofiran",
+    "instagram": "https://instagram.com/bestofiran",
+    "twitter": "",
+    "whatsapp": ""
+  },
+  "analyticsCode": "",
+  "defaultLocale": "fa",
+  "supportEmail": "info@bestofiran.ir",
+  "defaultSeoTitle": "Best-of Iran - بهترین کسب‌وکارهای ایران",
+  "defaultSeoDescription": "مرجع تخصصی معرفی بهترین کسب‌وکارهای ایران با بررسی‌های دقیق و واقعی کاربران.",
+  "defaultOgImage": "/og-image.svg"
+}

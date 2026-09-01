@@ -1,0 +1,213 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import { getAllPosts, getPostBySlug } from '../../lib/keystatic-content';
+
+// Prerender this page at build time
+export const prerender = true;
+
+// Generate static paths for all posts
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { data } = post;
+
+// Handle both string and object title formats
+const postTitle = typeof data.title === 'string'
+  ? data.title
+  : data.title?.name || post.slug;
+
+// SEO fields
+const seoTitle = data.seoTitle || postTitle || 'مقاله';
+const seoDescription = data.seoDescription || data.excerpt || '';
+const ogImage = data.ogImage || '/og-image.png';
+
+// Render document content to HTML
+let contentHtml = '';
+try {
+  if (data.content) {
+    const rendered = await data.content();
+    contentHtml = rendered;
+  }
+} catch (e) {
+  console.error('Error rendering content:', e);
+}
+
+// Format date for display
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  try {
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  } catch {
+    return dateStr;
+  }
+}
+
+// Generate Schema.org JSON-LD
+const schemaData = data.schemaType === 'Article' ? {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: seoTitle,
+  description: seoDescription,
+  author: {
+    '@type': 'Organization',
+    name: data.author || 'Best-of Iran',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Best-of Iran',
+  },
+  datePublished: data.date,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': Astro.url.href,
+  },
+} : null;
+---
+
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="fa">
+<head>
+  <BaseHead
+    title={seoTitle}
+    description={seoDescription}
+    ogImage={ogImage}
+    ogType="article"
+  />
+  {schemaData && <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />}
+  <style>
+    .article-content h1 { font-size: 2rem; font-weight: 700; color: var(--color-primary); margin: 1.5rem 0 1rem; }
+    .article-content h2 { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); margin: 1.5rem 0 0.75rem; }
+    .article-content h3 { font-size: 1.25rem; font-weight: 600; color: var(--color-on-surface); margin: 1.25rem 0 0.5rem; }
+    .article-content p { color: var(--color-on-surface-variant); line-height: 1.8; margin-bottom: 1rem; }
+    .article-content ul, .article-content ol { color: var(--color-on-surface-variant); padding-right: 1.5rem; margin-bottom: 1rem; }
+    .article-content li { margin-bottom: 0.5rem; }
+    .article-content a { color: var(--color-primary); text-decoration: underline; }
+    .article-content img { border-radius: 0.75rem; margin: 1.5rem 0; max-width: 100%; }
+    .article-content blockquote { border-right: 4px solid var(--color-primary); padding-right: 1rem; margin: 1.5rem 0; color: var(--color-on-surface-variant); }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen rtl">
+  <!-- Header -->
+  <nav class="bg-surface border-b border-outline-variant sticky top-0 z-50">
+    <div class="flex flex-row-reverse justify-between items-center w-full px-4 md:px-8 py-4 max-w-screen-2xl mx-auto">
+      <a class="text-2xl font-bold text-primary" href="/">Best-of Iran</a>
+      <div class="hidden md:flex gap-6 items-center">
+        <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="/">خانه</a>
+        <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="/">دسته‌بندی‌ها</a>
+        <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="/">درباره ما</a>
+      </div>
+      <a href="/register-business" class="bg-primary text-on-primary font-medium text-sm px-4 py-2 rounded-lg hover:brightness-110 transition-all">ثبت کسب‌وکار</a>
+    </div>
+  </nav>
+
+  <article class="max-w-screen-xl mx-auto px-4 md:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="flex text-on-surface-variant text-xs font-medium mb-6">
+      <ol class="inline-flex items-center space-x-2 space-x-reverse">
+        <li class="inline-flex items-center">
+          <a class="hover:text-primary transition-colors" href="/">خانه</a>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <span class="material-symbols-outlined mx-1 text-xs">chevron_left</span>
+            <a class="hover:text-primary transition-colors" href="/">مقالات</a>
+          </div>
+        </li>
+        <li aria-current="page">
+          <div class="flex items-center">
+            <span class="material-symbols-outlined mx-1 text-xs">chevron_left</span>
+            <span class="text-on-surface">{seoTitle}</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-primary mb-4 leading-tight">{postTitle}</h1>
+      <div class="flex flex-wrap items-center gap-4 text-on-surface-variant text-sm font-medium">
+        {data.date && (
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">calendar_today</span>
+            <span>{formatDate(data.date)}</span>
+          </div>
+        )}
+        {data.author && (
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">person</span>
+            <span>{data.author}</span>
+          </div>
+        )}
+        {data.readingTime && (
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">timer</span>
+            <span>زمان مطالعه: {data.readingTime}</span>
+          </div>
+        )}
+      </div>
+      {data.excerpt && (
+        <p class="mt-4 text-lg text-on-surface-variant leading-relaxed border-r-4 border-primary pr-4">
+          {data.excerpt}
+        </p>
+      )}
+    </header>
+
+    <!-- Featured Image -->
+    {data.featuredImage && (
+      <div class="mb-8 rounded-xl overflow-hidden">
+        <img src={data.featuredImage} alt={seoTitle} class="w-full h-auto object-cover max-h-96" loading="eager" />
+      </div>
+    )}
+
+    <!-- Article Content -->
+    {contentHtml && (
+      <div class="article-content prose prose-invert max-w-none" set:html={contentHtml} />
+    )}
+
+    <!-- Tags -->
+    {data.tags && data.tags.length > 0 && (
+      <div class="mt-8 pt-6 border-t border-outline-variant">
+        <div class="flex flex-wrap gap-2">
+          {data.tags.map((tag: string) => (
+            <span class="bg-surface-variant text-on-surface px-3 py-1 rounded-full text-sm">#{tag}</span>
+          ))}
+        </div>
+      </div>
+    )}
+  </article>
+
+  <!-- Footer -->
+  <footer class="bg-surface border-t border-outline-variant mt-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 px-4 md:px-8 py-12 max-w-screen-2xl mx-auto">
+      <div class="col-span-2">
+        <div class="text-2xl font-bold text-primary mb-4">Best-of Iran</div>
+        <p class="text-sm text-on-surface-variant mb-4">مرجع تخصصی نقد و بررسی و رتبه‌بندی بهترین کسب‌وکارهای ایران.</p>
+        <p class="text-xs text-on-surface-variant">© ۲۰۲۴ بست آف ایران. تمامی حقوق محفوظ است.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-on-surface mb-3">دسته‌بندی‌ها</h4>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">رستوران‌ها</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">کافه‌ها</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">هتل‌ها</a>
+      </div>
+      <div>
+        <h4 class="font-bold text-on-surface mb-3">اطلاعات</h4>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">درباره ما</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">تماس با ما</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/register-business">ثبت کسب‌وکار</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

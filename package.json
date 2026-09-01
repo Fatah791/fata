@@ -21,8 +21,16 @@
   },
   "homepage": "https://github.com/Fatah791/fata#readme",
   "dependencies": {
+    "@astrojs/vercel": "^11.0.9",
+    "@keystatic/astro": "^6.0.0",
+    "@keystatic/core": "^0.6.9",
     "@tailwindcss/vite": "^4.0.0",
-    "astro": "^7.2.9",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.0.0",
+    "typescript": "^7.0.2",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "astro": "^7.2.10"
   }
 }

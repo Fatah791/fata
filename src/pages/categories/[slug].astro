@@ -1,0 +1,168 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import { getAllCategories, getCategoryBySlug, getPostsByCategory } from '../../lib/keystatic-content';
+
+// Prerender this page at build time
+export const prerender = true;
+
+// Generate static paths for all categories
+export async function getStaticPaths() {
+  const categories = await getAllCategories();
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const posts = await getPostsByCategory(category.slug);
+
+// Handle both string and object title formats
+const categoryTitle = typeof category.data.title === 'string'
+  ? category.data.title
+  : category.data.title?.name || category.slug;
+
+const seoTitle = category.data.seoTitle || `${categoryTitle} | Best-of Iran`;
+const seoDescription = category.data.seoDescription || category.data.description || '';
+
+// Format date
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  try {
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  } catch {
+    return dateStr;
+  }
+}
+---
+
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="fa">
+<head>
+  <BaseHead title={seoTitle} description={seoDescription} />
+</head>
+<body class="bg-background text-on-surface min-h-screen rtl">
+  <!-- Header -->
+  <nav class="bg-surface border-b border-outline-variant sticky top-0 z-50">
+    <div class="flex flex-row-reverse justify-between items-center w-full px-4 md:px-8 py-4 max-w-screen-2xl mx-auto">
+      <a class="text-2xl font-bold text-primary" href="/">Best-of Iran</a>
+      <div class="hidden md:flex gap-6 items-center">
+        <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="/">خانه</a>
+        <a class="text-sm font-medium text-primary border-b-2 border-primary pb-1" href="/">دسته‌بندی‌ها</a>
+        <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="/">درباره ما</a>
+      </div>
+      <a href="/register-business" class="bg-primary text-on-primary font-medium text-sm px-4 py-2 rounded-lg hover:brightness-110 transition-all">ثبت کسب‌وکار</a>
+    </div>
+  </nav>
+
+  <main class="max-w-screen-xl mx-auto px-4 md:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="flex text-on-surface-variant text-xs font-medium mb-8">
+      <ol class="inline-flex items-center space-x-2 space-x-reverse">
+        <li class="inline-flex items-center">
+          <a class="hover:text-primary transition-colors" href="/">خانه</a>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <span class="material-symbols-outlined mx-1 text-xs">chevron_left</span>
+            <a class="hover:text-primary transition-colors" href="/">دسته‌بندی‌ها</a>
+          </div>
+        </li>
+        <li aria-current="page">
+          <div class="flex items-center">
+            <span class="material-symbols-outlined mx-1 text-xs">chevron_left</span>
+            <span class="text-on-surface">{categoryTitle}</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <header class="text-center mb-12">
+      <div
+        class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+        style={category.data.color ? `background-color: ${category.data.color}20;` : ''}
+      >
+        <span
+          class="material-symbols-outlined text-4xl text-primary"
+          style={category.data.color ? `color: ${category.data.color};` : ''}
+        >
+          {category.data.icon || 'category'}
+        </span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold text-primary mb-4">{categoryTitle}</h1>
+      {category.data.description && (
+        <p class="text-lg text-on-surface-variant max-w-2xl mx-auto">{category.data.description}</p>
+      )}
+    </header>
+
+    <!-- Posts Grid -->
+    {posts.length === 0 ? (
+      <div class="text-center py-16 text-on-surface-variant">
+        <span class="material-symbols-outlined text-5xl mb-4">article</span>
+        <p class="text-lg">هنوز مقاله‌ای در این دسته‌بندی منتشر نشده است.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <article class="bg-surface-container rounded-2xl overflow-hidden border border-surface-variant/50 hover:border-primary/50 transition-all flex flex-col group hover:shadow-[0_0_30px_rgba(232,184,74,0.1)]">
+            <div class="h-48 bg-surface-container-high relative overflow-hidden">
+              {post.data.featuredImage ? (
+                <img src={post.data.featuredImage} alt={post.data.title?.name} class="w-full h-full object-cover" loading="lazy" />
+              ) : (
+                <div class="absolute inset-0 bg-gradient-to-br from-surface-container-high to-surface-variant"></div>
+              )}
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              {post.data.date && (
+                <div class="flex items-center gap-2 mb-3 text-on-surface-variant">
+                  <span class="material-symbols-outlined text-sm">calendar_month</span>
+                  <span class="text-xs font-label-sm">{formatDate(post.data.date)}</span>
+                </div>
+              )}
+              <h3 class="font-headline-md text-lg text-on-surface mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                <a href={`/articles/${post.slug}`}>{post.data.title?.name}</a>
+              </h3>
+              {post.data.excerpt && (
+                <p class="text-on-surface-variant text-sm line-clamp-3 mb-4 flex-grow">{post.data.excerpt}</p>
+              )}
+              <a class="text-primary font-label-md flex items-center gap-1 mt-auto hover:underline w-fit" href={`/articles/${post.slug}`}>
+                ادامه مطلب
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-surface border-t border-outline-variant mt-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 px-4 md:px-8 py-12 max-w-screen-2xl mx-auto">
+      <div class="col-span-2">
+        <div class="text-2xl font-bold text-primary mb-4">Best-of Iran</div>
+        <p class="text-sm text-on-surface-variant mb-4">مرجع تخصصی نقد و بررسی و رتبه‌بندی بهترین کسب‌وکارهای ایران.</p>
+        <p class="text-xs text-on-surface-variant">© ۲۰۲۴ بست آف ایران. تمامی حقوق محفوظ است.</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-on-surface mb-3">دسته‌بندی‌ها</h4>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">رستوران‌ها</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">کافه‌ها</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">هتل‌ها</a>
+      </div>
+      <div>
+        <h4 class="font-bold text-on-surface mb-3">اطلاعات</h4>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">درباره ما</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/">تماس با ما</a>
+        <a class="block text-sm text-on-surface-variant hover:text-primary transition-all mb-2" href="/register-business">ثبت کسب‌وکار</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
