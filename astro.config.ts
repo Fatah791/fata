@@ -5,7 +5,7 @@ import keystaticIntegration from '@keystatic/astro';
 import keystaticConfig from './keystatic.config';
 
 export default defineConfig({
-  site: 'https://fata-eyqblsquc-fata3.vercel.app',
+  site: 'https://fata-fata3.vercel.app',
   output: 'server',
   adapter: vercel(),
   vite: {
